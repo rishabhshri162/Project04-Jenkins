@@ -35,7 +35,18 @@ public final class JDBCDataSource {
         try {
             cpds = new ComboPooledDataSource();
             cpds.setDriverClass(rb.getString("driver"));
-            cpds.setJdbcUrl(rb.getString("url"));
+
+            String env = System.getenv("ENV");
+            String dbUrl;
+            
+            if ("docker".equalsIgnoreCase(env)) {
+                dbUrl = rb.getString("url.docker");
+            } else {
+                dbUrl = rb.getString("url.local");
+            }
+
+            cpds.setJdbcUrl(dbUrl);
+            
             cpds.setUser(rb.getString("username"));
             cpds.setPassword(rb.getString("password"));
             cpds.setInitialPoolSize(Integer.parseInt(rb.getString("initialpoolsize")));
