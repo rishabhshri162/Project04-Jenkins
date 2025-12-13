@@ -74,7 +74,6 @@ public class LoginCtl extends BaseCtl {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 
 		HttpSession session = request.getSession();
 
@@ -99,8 +98,15 @@ public class LoginCtl extends BaseCtl {
 					if (rolebean != null) {
 						session.setAttribute("role", rolebean.getName());
 					}
-					ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-					return;
+
+					String uri = (String) request.getParameter("uri");
+					if (uri == null || "null".equalsIgnoreCase(uri)) {
+						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+						return;
+					} else {
+						ServletUtility.redirect(uri, request, response);
+						return;
+					}
 				} else {
 					bean = (UserBean) populateBean(request);
 					ServletUtility.setBean(bean, request);

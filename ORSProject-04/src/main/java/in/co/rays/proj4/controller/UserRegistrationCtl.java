@@ -145,7 +145,7 @@ public class UserRegistrationCtl extends BaseCtl {
 				ServletUtility.setErrorMessage("Login id already exists", request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
-				return;
+				return; 
 			}
 			ServletUtility.forward(getView(), request, response);
 		} else if (OP_RESET.equalsIgnoreCase(op)) {

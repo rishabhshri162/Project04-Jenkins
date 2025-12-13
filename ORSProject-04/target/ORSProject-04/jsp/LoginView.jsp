@@ -34,17 +34,20 @@
 					</font>
 				</H3>
 			</div>
+			<%
+				String uri = (String) request.getAttribute("uri");
+			%>
 			
 			<table>
 				<tr>
 					<th>Login ID:</th>
-					<td><input type="text" name="login"
+					<td><input type="text" name="login" placeholder="Enter Your E-mail"
 						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
 				</tr>
 				<tr>
 					<th>Password:</th>
-					<td><input type="text" name="password"
+					<td><input type="text" name="password" placeholder="Enter Your Password"
 						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
 				</tr>
@@ -64,6 +67,7 @@
 				</tr>
 			</table>
 		</div>
+			<input type="hidden" name="uri" value="<%=uri%>">
 	</form>
 </body>
 </html>

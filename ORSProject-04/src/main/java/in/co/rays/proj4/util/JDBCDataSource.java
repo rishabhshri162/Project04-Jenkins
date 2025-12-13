@@ -43,8 +43,6 @@ public final class JDBCDataSource {
             } else {
                 cpds.setJdbcUrl(rb.getString("url.local"));
             }
-
-           
             
             cpds.setUser(rb.getString("username"));
             cpds.setPassword(rb.getString("password"));
