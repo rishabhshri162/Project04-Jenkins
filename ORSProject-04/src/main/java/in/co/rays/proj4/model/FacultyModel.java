@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.bean.FacultyBean;
@@ -25,6 +27,8 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class FacultyModel {
 
+    private static Logger log = Logger.getLogger(FacultyModel.class);
+
     /**
      * Generates next primary key.
      *
@@ -32,6 +36,9 @@ public class FacultyModel {
      * @throws DatabaseException when database error occurs
      */
     public Integer nextPk() throws DatabaseException {
+
+        log.debug("FacultyModel nextPk started");
+
         Connection conn = null;
         int pk = 0;
         try {
@@ -41,7 +48,11 @@ public class FacultyModel {
             while (rs.next()) pk = rs.getInt(1);
             rs.close();
             pstmt.close();
+
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in getting PK", e);
             throw new DatabaseException("Exception : Exception in getting PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -59,6 +70,8 @@ public class FacultyModel {
      */
     public long add(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
 
+        log.debug("FacultyModel add started");
+
         Connection conn = null;
         int pk = 0;
 
@@ -73,6 +86,7 @@ public class FacultyModel {
 
         FacultyBean exist = findByEmail(bean.getEmail());
         if (exist != null) {
+            log.warn("Duplicate Email : " + bean.getEmail());
             throw new DuplicateRecordException("Email Id already exists");
         }
 
@@ -106,11 +120,15 @@ public class FacultyModel {
             conn.commit();
             pstmt.close();
 
+            log.info("Faculty added successfully, PK = " + pk);
+
         } catch (Exception e) {
-            try { conn.rollback(); } 
+            try { conn.rollback(); }
             catch (Exception ex) {
+                log.error("Add rollback failed", ex);
                 throw new ApplicationException("Exception : add rollback exception " + ex.getMessage());
             }
+            log.error("Exception in add Faculty", e);
             throw new ApplicationException("Exception : Exception in add Faculty");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -127,6 +145,8 @@ public class FacultyModel {
      */
     public void update(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
 
+        log.debug("FacultyModel update started for ID : " + bean.getId());
+
         Connection conn = null;
 
         bean.setCollegeName(new CollegeModel().findByPk(bean.getCollegeId()).getName());
@@ -135,6 +155,7 @@ public class FacultyModel {
 
         FacultyBean exist = findByEmail(bean.getEmail());
         if (exist != null && exist.getId() != bean.getId()) {
+            log.warn("Duplicate Email on update : " + bean.getEmail());
             throw new DuplicateRecordException("EmailId is already exist");
         }
 
@@ -169,11 +190,15 @@ public class FacultyModel {
             conn.commit();
             pstmt.close();
 
+            log.info("Faculty updated successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
             try { conn.rollback(); }
             catch (Exception ex) {
+                log.error("Update rollback failed", ex);
                 throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
             }
+            log.error("Exception in updating Faculty", e);
             throw new ApplicationException("Exception in updating Faculty ");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -188,6 +213,8 @@ public class FacultyModel {
      */
     public void delete(FacultyBean bean) throws ApplicationException {
 
+        log.debug("FacultyModel delete started for ID : " + bean.getId());
+
         Connection conn = null;
 
         try {
@@ -201,11 +228,15 @@ public class FacultyModel {
             conn.commit();
             pstmt.close();
 
+            log.info("Faculty deleted successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
             try { conn.rollback(); }
             catch (Exception ex) {
+                log.error("Delete rollback failed", ex);
                 throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
             }
+            log.error("Exception in delete Faculty", e);
             throw new ApplicationException("Exception : Exception in delete Faculty");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -220,6 +251,8 @@ public class FacultyModel {
      * @throws ApplicationException if retrieval fails
      */
     public FacultyBean findByPk(long pk) throws ApplicationException {
+
+        log.debug("FacultyModel findByPk started, PK = " + pk);
 
         StringBuffer sql = new StringBuffer("select * from st_faculty where id = ?");
         FacultyBean bean = null;
@@ -256,6 +289,7 @@ public class FacultyModel {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByPk", e);
             throw new ApplicationException("Exception : Exception in getting Faculty by pk");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -271,6 +305,8 @@ public class FacultyModel {
      * @throws ApplicationException if retrieval fails
      */
     public FacultyBean findByEmail(String email) throws ApplicationException {
+
+        log.debug("FacultyModel findByEmail started, Email = " + email);
 
         StringBuffer sql = new StringBuffer("select * from st_faculty where email = ?");
         FacultyBean bean = null;
@@ -308,6 +344,7 @@ public class FacultyModel {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByEmail", e);
             throw new ApplicationException("Exception : Exception in getting Faculty by Email");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -336,6 +373,8 @@ public class FacultyModel {
      */
     public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize)
             throws ApplicationException {
+
+        log.debug("FacultyModel search started");
 
         StringBuffer sql = new StringBuffer("select * from st_faculty where 1=1");
 
@@ -383,8 +422,8 @@ public class FacultyModel {
 
         try {
             conn = JDBCDataSource.getConnection();
-           	PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-           	ResultSet rs = pstmt.executeQuery();
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 bean = new FacultyBean();
@@ -393,27 +432,28 @@ public class FacultyModel {
                 bean.setLastName(rs.getString(3));
                 bean.setDob(rs.getDate(4));
                 bean.setGender(rs.getString(5));
-               	bean.setMobileNo(rs.getString(6));
-               	bean.setEmail(rs.getString(7));
-               	bean.setCollegeId(rs.getLong(8));
+                bean.setMobileNo(rs.getString(6));
+                bean.setEmail(rs.getString(7));
+                bean.setCollegeId(rs.getLong(8));
                 bean.setCollegeName(rs.getString(9));
-               	bean.setCourseId(rs.getLong(10));
-               	bean.setCourseName(rs.getString(11));
-               	bean.setSubjectId(rs.getLong(12));
-               	bean.setSubjectName(rs.getString(13));
-               	bean.setCreatedBy(rs.getString(14));
-               	bean.setModifiedBy(rs.getString(15));
+                bean.setCourseId(rs.getLong(10));
+                bean.setCourseName(rs.getString(11));
+                bean.setSubjectId(rs.getLong(12));
+                bean.setSubjectName(rs.getString(13));
+                bean.setCreatedBy(rs.getString(14));
+                bean.setModifiedBy(rs.getString(15));
                 bean.setCreatedDatetime(rs.getTimestamp(16));
-               	bean.setModifiedDatetime(rs.getTimestamp(17));
+                bean.setModifiedDatetime(rs.getTimestamp(17));
 
                 list.add(bean);
             }
 
-           	rs.close();
+            rs.close();
             pstmt.close();
 
         } catch (Exception e) {
-           	throw new ApplicationException("Exception : Exception in search Faculty");
+            log.error("Exception in search Faculty", e);
+            throw new ApplicationException("Exception : Exception in search Faculty");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }

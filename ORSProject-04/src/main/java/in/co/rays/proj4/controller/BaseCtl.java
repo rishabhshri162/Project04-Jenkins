@@ -125,6 +125,7 @@ public abstract class BaseCtl extends HttpServlet {
 		super.service(request, response);
 	}
 
+
 	/**
 	 * Returns the JSP view path. Must be implemented by every controller.
 	 */

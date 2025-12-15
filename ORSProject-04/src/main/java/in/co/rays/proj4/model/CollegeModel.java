@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
@@ -21,6 +23,8 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class CollegeModel {
 
+    private static Logger log = Logger.getLogger(CollegeModel.class);
+
     /**
      * Generates the next primary key of st_college.
      *
@@ -28,6 +32,8 @@ public class CollegeModel {
      * @throws DatabaseException on DB errors
      */
     public Integer nextPk() throws DatabaseException {
+
+        log.debug("CollegeModel nextPk started");
 
         Connection conn = null;
         int pk = 0;
@@ -44,7 +50,10 @@ public class CollegeModel {
             rs.close();
             pstmt.close();
 
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in getting PK", e);
             throw new DatabaseException("Exception: Exception in getting PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -63,11 +72,14 @@ public class CollegeModel {
      */
     public long add(CollegeBean bean) throws ApplicationException, DuplicateRecordException {
 
+        log.debug("CollegeModel add started");
+
         Connection conn = null;
         int pk = 0;
 
         CollegeBean duplicate = findByName(bean.getName());
         if (duplicate != null) {
+            log.warn("Duplicate College Name : " + bean.getName());
             throw new DuplicateRecordException("College Name already exists");
         }
 
@@ -77,8 +89,7 @@ public class CollegeModel {
             conn.setAutoCommit(false);
 
             PreparedStatement pstmt = conn.prepareStatement(
-                "insert into st_college values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            );
+                    "insert into st_college values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             pstmt.setInt(1, pk);
             pstmt.setString(2, bean.getName());
@@ -95,11 +106,16 @@ public class CollegeModel {
             conn.commit();
             pstmt.close();
 
+            log.info("College added successfully, PK = " + pk);
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Add rollback failed", ex);
                 throw new ApplicationException("Exception : add rollback exception " + ex.getMessage());
             }
+            log.error("Exception in add College", e);
             throw new ApplicationException("Exception : Exception in add College");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -116,6 +132,8 @@ public class CollegeModel {
      */
     public void delete(CollegeBean bean) throws ApplicationException {
 
+        log.debug("CollegeModel delete started for ID : " + bean.getId());
+
         Connection conn = null;
 
         try {
@@ -123,8 +141,7 @@ public class CollegeModel {
             conn.setAutoCommit(false);
 
             PreparedStatement pstmt = conn.prepareStatement(
-                "delete from st_college where id = ?"
-            );
+                    "delete from st_college where id = ?");
 
             pstmt.setLong(1, bean.getId());
             pstmt.executeUpdate();
@@ -132,14 +149,19 @@ public class CollegeModel {
             conn.commit();
             pstmt.close();
 
+            log.info("College deleted successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Delete rollback failed", ex);
                 throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
             }
+            log.error("Exception in delete College", e);
             throw new ApplicationException("Exception : Exception in delete College");
         } finally {
-           	JDBCDataSource.closeConnection(conn);
+            JDBCDataSource.closeConnection(conn);
         }
     }
 
@@ -152,10 +174,13 @@ public class CollegeModel {
      */
     public void update(CollegeBean bean) throws ApplicationException, DuplicateRecordException {
 
+        log.debug("CollegeModel update started for ID : " + bean.getId());
+
         Connection conn = null;
 
         CollegeBean duplicate = findByName(bean.getName());
         if (duplicate != null && duplicate.getId() != bean.getId()) {
+            log.warn("Duplicate College Name on update : " + bean.getName());
             throw new DuplicateRecordException("College already exists");
         }
 
@@ -164,9 +189,8 @@ public class CollegeModel {
             conn.setAutoCommit(false);
 
             PreparedStatement pstmt = conn.prepareStatement(
-                "update st_college set name = ?, address = ?, state = ?, city = ?, phone_no = ?, "
-                + "created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?"
-            );
+                    "update st_college set name = ?, address = ?, state = ?, city = ?, phone_no = ?, "
+                            + "created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
 
             pstmt.setString(1, bean.getName());
             pstmt.setString(2, bean.getAddress());
@@ -183,11 +207,16 @@ public class CollegeModel {
             conn.commit();
             pstmt.close();
 
+            log.info("College updated successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Update rollback failed", ex);
                 throw new ApplicationException("Exception : Update rollback exception " + ex.getMessage());
             }
+            log.error("Exception in updating College", e);
             throw new ApplicationException("Exception in updating College");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -203,13 +232,14 @@ public class CollegeModel {
      */
     public CollegeBean findByPk(long pk) throws ApplicationException {
 
+        log.debug("CollegeModel findByPk started, PK = " + pk);
+
         StringBuffer sql = new StringBuffer("select * from st_college where id = ?");
         CollegeBean bean = null;
         Connection conn = null;
 
         try {
             conn = JDBCDataSource.getConnection();
-
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             pstmt.setLong(1, pk);
 
@@ -224,15 +254,16 @@ public class CollegeModel {
                 bean.setCity(rs.getString(5));
                 bean.setPhoneNo(rs.getString(6));
                 bean.setCreatedBy(rs.getString(7));
-               	bean.setModifiedBy(rs.getString(8));
+                bean.setModifiedBy(rs.getString(8));
                 bean.setCreatedDatetime(rs.getTimestamp(9));
-               	bean.setModifiedDatetime(rs.getTimestamp(10));
+                bean.setModifiedDatetime(rs.getTimestamp(10));
             }
 
             rs.close();
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByPk", e);
             throw new ApplicationException("Exception : Exception in getting College by PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -250,13 +281,14 @@ public class CollegeModel {
      */
     public CollegeBean findByName(String name) throws ApplicationException {
 
+        log.debug("CollegeModel findByName started, Name = " + name);
+
         StringBuffer sql = new StringBuffer("select * from st_college where name = ?");
         CollegeBean bean = null;
         Connection conn = null;
 
         try {
             conn = JDBCDataSource.getConnection();
-
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             pstmt.setString(1, name);
 
@@ -264,22 +296,23 @@ public class CollegeModel {
 
             while (rs.next()) {
                 bean = new CollegeBean();
-               	bean.setId(rs.getLong(1));
-               	bean.setName(rs.getString(2));
-               	bean.setAddress(rs.getString(3));
-               	bean.setState(rs.getString(4));
+                bean.setId(rs.getLong(1));
+                bean.setName(rs.getString(2));
+                bean.setAddress(rs.getString(3));
+                bean.setState(rs.getString(4));
                 bean.setCity(rs.getString(5));
-               	bean.setPhoneNo(rs.getString(6));
-               	bean.setCreatedBy(rs.getString(7));
-               	bean.setModifiedBy(rs.getString(8));
-               	bean.setCreatedDatetime(rs.getTimestamp(9));
-               	bean.setModifiedDatetime(rs.getTimestamp(10));
+                bean.setPhoneNo(rs.getString(6));
+                bean.setCreatedBy(rs.getString(7));
+                bean.setModifiedBy(rs.getString(8));
+                bean.setCreatedDatetime(rs.getTimestamp(9));
+                bean.setModifiedDatetime(rs.getTimestamp(10));
             }
 
             rs.close();
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByName", e);
             throw new ApplicationException("Exception : Exception in getting College by name");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -309,6 +342,8 @@ public class CollegeModel {
      */
     public List<CollegeBean> search(CollegeBean bean, int pageNo, int pageSize)
             throws ApplicationException {
+
+        log.debug("CollegeModel search started");
 
         StringBuffer sql = new StringBuffer("select * from st_college where 1 = 1");
 
@@ -343,31 +378,29 @@ public class CollegeModel {
 
         try {
             conn = JDBCDataSource.getConnection();
-
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 bean = new CollegeBean();
-
                 bean.setId(rs.getLong(1));
-               	bean.setName(rs.getString(2));
-               	bean.setAddress(rs.getString(3));
-               	bean.setState(rs.getString(4));
-               	bean.setCity(rs.getString(5));
-               	bean.setPhoneNo(rs.getString(6));
-               	bean.setCreatedBy(rs.getString(7));
-               	bean.setModifiedBy(rs.getString(8));
-               	bean.setCreatedDatetime(rs.getTimestamp(9));
-               	bean.setModifiedDatetime(rs.getTimestamp(10));
-
-               	list.add(bean);
+                bean.setName(rs.getString(2));
+                bean.setAddress(rs.getString(3));
+                bean.setState(rs.getString(4));
+                bean.setCity(rs.getString(5));
+                bean.setPhoneNo(rs.getString(6));
+                bean.setCreatedBy(rs.getString(7));
+                bean.setModifiedBy(rs.getString(8));
+                bean.setCreatedDatetime(rs.getTimestamp(9));
+                bean.setModifiedDatetime(rs.getTimestamp(10));
+                list.add(bean);
             }
 
             rs.close();
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in search College", e);
             throw new ApplicationException("Exception : Exception in search College");
         } finally {
             JDBCDataSource.closeConnection(conn);

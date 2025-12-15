@@ -51,8 +51,14 @@
 
         <!-- College menus (Admin only since College role removed) -->
         <a href="<%=ORSView.COLLEGE_CTL%>"><b>Add College</b></a> |
+<<<<<<< HEAD
+         <a href="<%=ORSView.COLLEGE_LIST_CTL%>"><b>College List</b></a> |
+        <a href="<%=ORSView.PATIENT_CTL%>"><b>Add Patient</b></a> |
+        <a href="<%=ORSView.PATIENT_LIST_CTL%>"><b>Patient List</b></a> |
+=======
         <a href="<%=ORSView.COLLEGE_LIST_CTL%>"><b>College List</b></a> |
 
+>>>>>>> b66b18678ea5d692b67ffd8295d5d33a51764471
     <% } %>
 
     <!-- Faculty + Admin Menus (College role replaced with Faculty) -->

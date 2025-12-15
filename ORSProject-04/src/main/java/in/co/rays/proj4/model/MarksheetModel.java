@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.BaseBean;
-import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.bean.MarksheetBean;
 import in.co.rays.proj4.bean.StudentBean;
 import in.co.rays.proj4.exception.ApplicationException;
@@ -26,6 +27,8 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class MarksheetModel extends BaseBean {
 
+    private static Logger log = Logger.getLogger(MarksheetModel.class);
+
     /**
      * Returns the next primary key for st_marksheet table.
      *
@@ -33,6 +36,9 @@ public class MarksheetModel extends BaseBean {
      * @throws DatabaseException if database error occurs
      */
     public Integer nextPk() throws DatabaseException {
+
+        log.debug("MarksheetModel nextPk started");
+
         Connection conn = null;
         int pk = 0;
         try {
@@ -44,7 +50,11 @@ public class MarksheetModel extends BaseBean {
             }
             rs.close();
             pstmt.close();
+
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in getting PK", e);
             throw new DatabaseException("Exception in Marksheet getting PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -62,6 +72,8 @@ public class MarksheetModel extends BaseBean {
      */
     public long add(MarksheetBean bean) throws ApplicationException, DuplicateRecordException {
 
+        log.debug("MarksheetModel add started");
+
         Connection conn = null;
         int pk = 0;
 
@@ -71,6 +83,7 @@ public class MarksheetModel extends BaseBean {
 
         MarksheetBean existMarksheet = findByRollNo(bean.getRollNo());
         if (existMarksheet != null) {
+            log.warn("Duplicate Roll No : " + bean.getRollNo());
             throw new DuplicateRecordException("Roll Number already exists");
         }
 
@@ -98,11 +111,16 @@ public class MarksheetModel extends BaseBean {
             conn.commit();
             pstmt.close();
 
+            log.info("Marksheet added successfully, PK = " + pk);
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Add rollback failed", ex);
                 throw new ApplicationException("add rollback exception " + ex.getMessage());
             }
+            log.error("Exception in add marksheet", e);
             throw new ApplicationException("Exception in add marksheet");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -120,10 +138,13 @@ public class MarksheetModel extends BaseBean {
     public void update(MarksheetBean bean)
             throws ApplicationException, DuplicateRecordException {
 
+        log.debug("MarksheetModel update started, ID = " + bean.getId());
+
         Connection conn = null;
 
         MarksheetBean existBean = findByRollNo(bean.getRollNo());
         if (existBean != null && existBean.getId() != bean.getId()) {
+            log.warn("Duplicate Roll No on update : " + bean.getRollNo());
             throw new DuplicateRecordException("Roll No is already exist");
         }
 
@@ -154,11 +175,16 @@ public class MarksheetModel extends BaseBean {
             conn.commit();
             pstmt.close();
 
+            log.info("Marksheet updated successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Update rollback failed", ex);
                 throw new ApplicationException("Update rollback exception " + ex.getMessage());
             }
+            log.error("Exception in updating Marksheet", e);
             throw new ApplicationException("Exception in updating Marksheet ");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -173,6 +199,8 @@ public class MarksheetModel extends BaseBean {
      */
     public void delete(MarksheetBean bean) throws ApplicationException {
 
+        log.debug("MarksheetModel delete started, ID = " + bean.getId());
+
         Connection conn = null;
 
         try {
@@ -186,11 +214,16 @@ public class MarksheetModel extends BaseBean {
             conn.commit();
             pstmt.close();
 
+            log.info("Marksheet deleted successfully, ID = " + bean.getId());
+
         } catch (Exception e) {
-            try { conn.rollback(); }
-            catch (Exception ex) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                log.error("Delete rollback failed", ex);
                 throw new ApplicationException("Delete rollback exception " + ex.getMessage());
             }
+            log.error("Exception in delete marksheet", e);
             throw new ApplicationException("Exception in delete marksheet");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -206,6 +239,8 @@ public class MarksheetModel extends BaseBean {
      */
     public MarksheetBean findByPk(long pk) throws ApplicationException {
 
+        log.debug("MarksheetModel findByPk started, PK = " + pk);
+
         StringBuffer sql = new StringBuffer("select * from st_marksheet where id = ?");
         MarksheetBean bean = null;
         Connection conn = null;
@@ -220,13 +255,13 @@ public class MarksheetModel extends BaseBean {
             while (rs.next()) {
                 bean = new MarksheetBean();
                 bean.setId(rs.getLong(1));
-               	bean.setRollNo(rs.getString(2));
+                bean.setRollNo(rs.getString(2));
                 bean.setStudentId(rs.getLong(3));
                 bean.setName(rs.getString(4));
                 bean.setPhysics(rs.getInt(5));
-               	bean.setChemistry(rs.getInt(6));
+                bean.setChemistry(rs.getInt(6));
                 bean.setMaths(rs.getInt(7));
-               	bean.setCreatedBy(rs.getString(8));
+                bean.setCreatedBy(rs.getString(8));
                 bean.setModifiedBy(rs.getString(9));
                 bean.setCreatedDatetime(rs.getTimestamp(10));
                 bean.setModifiedDatetime(rs.getTimestamp(11));
@@ -236,6 +271,7 @@ public class MarksheetModel extends BaseBean {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByPk", e);
             throw new ApplicationException("Exception in getting marksheet by pk");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -251,6 +287,8 @@ public class MarksheetModel extends BaseBean {
      * @throws ApplicationException if retrieval fails
      */
     public MarksheetBean findByRollNo(String rollNo) throws ApplicationException {
+
+        log.debug("MarksheetModel findByRollNo started, RollNo = " + rollNo);
 
         StringBuffer sql = new StringBuffer("select * from st_marksheet where roll_no = ?");
         MarksheetBean bean = null;
@@ -270,21 +308,22 @@ public class MarksheetModel extends BaseBean {
                 bean.setStudentId(rs.getLong(3));
                 bean.setName(rs.getString(4));
                 bean.setPhysics(rs.getInt(5));
-               	bean.setChemistry(rs.getInt(6));
+                bean.setChemistry(rs.getInt(6));
                 bean.setMaths(rs.getInt(7));
-               	bean.setCreatedBy(rs.getString(8));
+                bean.setCreatedBy(rs.getString(8));
                 bean.setModifiedBy(rs.getString(9));
                 bean.setCreatedDatetime(rs.getTimestamp(10));
                 bean.setModifiedDatetime(rs.getTimestamp(11));
             }
 
-           	rs.close();
-           	pstmt.close();
+            rs.close();
+            pstmt.close();
 
         } catch (Exception e) {
-           	throw new ApplicationException("Exception in getting marksheet by roll no");
+            log.error("Exception in findByRollNo", e);
+            throw new ApplicationException("Exception in getting marksheet by roll no");
         } finally {
-           	JDBCDataSource.closeConnection(conn);
+            JDBCDataSource.closeConnection(conn);
         }
         return bean;
     }
@@ -309,21 +348,24 @@ public class MarksheetModel extends BaseBean {
      * @throws ApplicationException if search fails
      */
     public List<MarksheetBean> search(MarksheetBean bean, int pageNo, int pageSize)
-           	throws ApplicationException {
+            throws ApplicationException {
+
+        log.debug("MarksheetModel search started");
 
         StringBuffer sql = new StringBuffer("select * from st_marksheet where 1=1");
 
         if (bean != null) {
-            if (bean.getId() > 0) sql.append(" and id = " + bean.getId());
-           	if (bean.getRollNo() != null && bean.getRollNo().length() > 0)
+            if (bean.getId() > 0)
+                sql.append(" and id = " + bean.getId());
+            if (bean.getRollNo() != null && bean.getRollNo().length() > 0)
                 sql.append(" and roll_no like '" + bean.getRollNo() + "%'");
-           	if (bean.getName() != null && bean.getName().length() > 0)
+            if (bean.getName() != null && bean.getName().length() > 0)
                 sql.append(" and name like '" + bean.getName() + "%'");
-           	if (bean.getPhysics() != null && bean.getPhysics() > 0)
+            if (bean.getPhysics() != null && bean.getPhysics() > 0)
                 sql.append(" and physics = " + bean.getPhysics());
-           	if (bean.getChemistry() != null && bean.getChemistry() > 0)
+            if (bean.getChemistry() != null && bean.getChemistry() > 0)
                 sql.append(" and chemistry = " + bean.getChemistry());
-           	if (bean.getMaths() != null && bean.getMaths() > 0)
+            if (bean.getMaths() != null && bean.getMaths() > 0)
                 sql.append(" and maths = " + bean.getMaths());
         }
 
@@ -339,6 +381,7 @@ public class MarksheetModel extends BaseBean {
             conn = JDBCDataSource.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new MarksheetBean();
                 bean.setId(rs.getLong(1));
@@ -348,15 +391,18 @@ public class MarksheetModel extends BaseBean {
                 bean.setPhysics(rs.getInt(5));
                 bean.setChemistry(rs.getInt(6));
                 bean.setMaths(rs.getInt(7));
-               	bean.setCreatedBy(rs.getString(8));
+                bean.setCreatedBy(rs.getString(8));
                 bean.setModifiedBy(rs.getString(9));
-               	bean.setCreatedDatetime(rs.getTimestamp(10));
-               	bean.setModifiedDatetime(rs.getTimestamp(11));
+                bean.setCreatedDatetime(rs.getTimestamp(10));
+                bean.setModifiedDatetime(rs.getTimestamp(11));
                 list.add(bean);
             }
-           	rs.close();
+
+            rs.close();
+            pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in search Marksheet", e);
             throw new ApplicationException("Exception in search Marksheet: " + e.getMessage());
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -373,14 +419,16 @@ public class MarksheetModel extends BaseBean {
      * @throws ApplicationException if retrieval fails
      */
     public List<MarksheetBean> getMeritList(int pageNo, int pageSize)
-           	throws ApplicationException {
+            throws ApplicationException {
+
+        log.debug("MarksheetModel getMeritList started");
 
         ArrayList<MarksheetBean> list = new ArrayList<>();
         StringBuffer sql = new StringBuffer(
                 "select id, roll_no, name, physics, chemistry, maths, "
-                + "(physics + chemistry + maths) as total "
-                + "from st_marksheet where physics > 33 and chemistry > 33 and maths > 33 "
-                + "order by total desc");
+                        + "(physics + chemistry + maths) as total "
+                        + "from st_marksheet where physics > 33 and chemistry > 33 and maths > 33 "
+                        + "order by total desc");
 
         if (pageSize > 0) {
             pageNo = (pageNo - 1) * pageSize;
@@ -392,26 +440,27 @@ public class MarksheetModel extends BaseBean {
         try {
             conn = JDBCDataSource.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-           	ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 MarksheetBean bean = new MarksheetBean();
                 bean.setId(rs.getLong(1));
-               	bean.setRollNo(rs.getString(2));
+                bean.setRollNo(rs.getString(2));
                 bean.setName(rs.getString(3));
-               	bean.setPhysics(rs.getInt(4));
-               	bean.setChemistry(rs.getInt(5));
+                bean.setPhysics(rs.getInt(4));
+                bean.setChemistry(rs.getInt(5));
                 bean.setMaths(rs.getInt(6));
                 list.add(bean);
             }
 
-           	rs.close();
+            rs.close();
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in getting merit list of Marksheet", e);
             throw new ApplicationException("Exception in getting merit list of Marksheet");
         } finally {
-           	JDBCDataSource.closeConnection(conn);
+            JDBCDataSource.closeConnection(conn);
         }
 
         return list;
@@ -424,6 +473,6 @@ public class MarksheetModel extends BaseBean {
 
     @Override
     public String getValue() {
-       	return null;
+        return null;
     }
 }
