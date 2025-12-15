@@ -21,8 +21,8 @@
 
 		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.PatientBean"
 			scope="request"></jsp:useBean>
-			
-			<% HashMap <String,String> diseaseMap =(HashMap <String,String>)request.getAttribute("diseaseMap"); %>
+
+		<% HashMap <String,String> diseaseMap =(HashMap <String,String>)request.getAttribute("diseaseMap"); %>
 
 
 
@@ -50,22 +50,24 @@
 				</H3>
 			</div>
 
-			<input type="hidden" name="id" value="<%=bean.getId()%>"> 
-			<input type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
-			<input type="hidden" name="modifiedBy" value="<%=bean.getModifiedBy()%>"> 
-			<input type="hidden" name="createdDatetime"	value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
-			<input type="hidden" name="modifiedDatetime" value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
+			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
+				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
+			<input type="hidden" name="modifiedBy"
+				value="<%=bean.getModifiedBy()%>"> <input type="hidden"
+				name="createdDatetime"
+				value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
+			<input type="hidden" name="modifiedDatetime"
+				value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
 
 			<table>
 				<tr>
 					<th align="left">Name<span style="color: red">*</span></th>
-					<td><input type="text" name="name"
-						placeholder="Enter Name"
+					<td><input type="text" name="name" placeholder="Enter Name"
 						value="<%=DataUtility.getStringData(bean.getName())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("name", request)%></font></td>
 				</tr>
-				
-				
+
+
 				<tr>
 					<th align="left">Date of Visit<span style="color: red">*</span></th>
 					<td><input type="text" id="udate" name="dateOfVisit"
@@ -85,8 +87,7 @@
 					<td>
 						<%					
 							String htmlList = HTMLUtility.getList("disease", bean.getDisease(), diseaseMap);
-						%> 
-						<%=htmlList%>
+						%> <%=htmlList%>
 					</td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("disease", request)%></font></td>
 				</tr>
@@ -95,21 +96,21 @@
 					<td><%=HTMLUtility.getList("roleId", String.valueOf(bean.getRoleId()), roleList)%></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("roleId", request)%></font></td>
 				</tr> --%>
-				
-					<th></th>
-					<%
+
+				<th></th>
+				<%
 						if (bean != null && bean.getId() > 0) {
 					%>
-					<td align="left" colspan="2"><input type="submit"
-						name="operation" value="<%=PatientCtl.OP_UPDATE%>"> <input
-						type="submit" name="operation" value="<%=PatientCtl.OP_CANCEL%>">
-						<%
+				<td align="left" colspan="2"><input type="submit"
+					name="operation" value="<%=PatientCtl.OP_UPDATE%>"> <input
+					type="submit" name="operation" value="<%=PatientCtl.OP_CANCEL%>">
+					<%
 							} else {
 						%>
-					<td align="left" colspan="2"><input type="submit"
-						name="operation" value="<%=PatientCtl.OP_SAVE%>"> <input
-						type="submit" name="operation" value="<%=PatientCtl.OP_RESET%>">
-						<%
+				<td align="left" colspan="2"><input type="submit"
+					name="operation" value="<%=PatientCtl.OP_SAVE%>"> <input
+					type="submit" name="operation" value="<%=PatientCtl.OP_RESET%>">
+					<%
 							}
 						%>
 				</tr>

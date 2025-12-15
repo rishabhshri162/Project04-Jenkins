@@ -2,6 +2,7 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,14 @@ import in.co.rays.proj4.util.ServletUtility;
 public class UserRegistrationCtl extends BaseCtl {
 
 	public static final String OP_SIGN_UP = "Sign Up";
+
+	protected void preload(HttpServletRequest request) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("Female", "Female");
+		map.put("Male", "Male");
+
+		request.setAttribute("map", map);
+	}
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
@@ -116,7 +125,7 @@ public class UserRegistrationCtl extends BaseCtl {
 		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
 		bean.setMobileNo(DataUtility.getString(request.getParameter("mobileNo")));
 		bean.setRoleId(RoleBean.STUDENT);
-		
+
 		populateDTO(bean, request);
 
 		return bean;
@@ -145,7 +154,7 @@ public class UserRegistrationCtl extends BaseCtl {
 				ServletUtility.setErrorMessage("Login id already exists", request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
-				return; 
+				return;
 			}
 			ServletUtility.forward(getView(), request, response);
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
@@ -153,6 +162,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			return;
 		}
 	}
+
 	@Override
 	protected String getView() {
 		return ORSView.USER_REGISTRATION_VIEW;

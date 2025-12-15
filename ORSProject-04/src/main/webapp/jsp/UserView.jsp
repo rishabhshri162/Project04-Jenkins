@@ -18,6 +18,8 @@
 
 		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.UserBean"
 			scope="request"></jsp:useBean>
+			
+			<% HashMap <String,String> map =(HashMap <String,String>)request.getAttribute("map"); %>
 
 		<%
 			List<UserBean> roleList = (List<UserBean>) request.getAttribute("roleList");
@@ -100,9 +102,6 @@
 					<th align="left">Gender<span style="color: red">*</span></th>
 					<td>
 						<%
-							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("Male", "Male");
-							map.put("Female", "Female");
 
 							String htmlList = HTMLUtility.getList("gender", bean.getGender(), map);
 						%> <%=htmlList%>

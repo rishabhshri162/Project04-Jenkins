@@ -23,7 +23,6 @@ public class PatientCtl extends BaseCtl {
 
 
 	protected void preload(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		
 		HashMap<String, String> diseaseMap = new HashMap<String, String>();
 		diseaseMap.put("Diabetes", "Diabetes");
@@ -120,9 +119,13 @@ public class PatientCtl extends BaseCtl {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		String op = DataUtility.getString(req.getParameter("operation"));
+		
 		long id = DataUtility.getLong(req.getParameter("id"));
+		
 		PatientModel model = new PatientModel();
+		
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			PatientBean bean = (PatientBean) populateBean(req);
 			try {
@@ -132,12 +135,11 @@ public class PatientCtl extends BaseCtl {
 			} catch (DuplicateRecordException e) {
 				ServletUtility.setBean(bean, req);
 				ServletUtility.setErrorMessage("Patient already exists", req);
-				// TODO Auto-generated catch block
-
+				
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 				return;
-				// TODO: handle exception
+				
 			}
 
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
@@ -163,13 +165,11 @@ public class PatientCtl extends BaseCtl {
 			return;
 		}
 
-		// TODO Auto-generated method stub
 		ServletUtility.forward(getView(), req, resp);
 	}
 
 	@Override
 	protected String getView() {
-		// TODO Auto-generated method stub
 		return ORSView.PATIENT_VIEW;
 	}
 
