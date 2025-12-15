@@ -98,6 +98,7 @@
 <% } %>
 
 <hr>
+<%@ include file="footer.jsp"%>
 
 </body>
 </html>
