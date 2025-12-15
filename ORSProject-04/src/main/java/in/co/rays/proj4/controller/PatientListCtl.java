@@ -93,12 +93,12 @@ public class PatientListCtl extends BaseCtl {
      * @throws IOException
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	log.info("PatientListCtl doGet Method Started");
     	int pageNo = 1;
         int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
-        PatientBean bean = (PatientBean) populateBean(req);
+        PatientBean bean = (PatientBean) populateBean(request);
         PatientModel model = new PatientModel();
 
         try {
@@ -106,16 +106,16 @@ public class PatientListCtl extends BaseCtl {
             List<PatientBean> next = model.search(bean, pageNo + 1, pageSize);
 
             if (list == null || list.isEmpty()) {
-                ServletUtility.setErrorMessage("No record found", req);
+                ServletUtility.setErrorMessage("No record found", request);
             }
 
-            ServletUtility.setList(list, req);
-            ServletUtility.setPageNo(pageNo, req);
-            ServletUtility.setPageSize(pageSize, req);
-            ServletUtility.setBean(bean, req);
-            req.setAttribute("nextListSize", next.size());
+            ServletUtility.setList(list, request);
+            ServletUtility.setPageNo(pageNo, request);
+            ServletUtility.setPageSize(pageSize, request);
+            ServletUtility.setBean(bean, request);
+            request.setAttribute("nextListSize", next.size());
 
-            ServletUtility.forward(getView(), req, resp);
+            ServletUtility.forward(getView(), request, response);
 
         } catch (ApplicationException e) {
             e.printStackTrace();
@@ -133,19 +133,19 @@ public class PatientListCtl extends BaseCtl {
      * @throws IOException
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	log.info("PatientListCtl doPost Method Started");
-        int pageNo = DataUtility.getInt(req.getParameter("pageNo"));
+        int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
         int pageSize = DataUtility.getInt(PropertyReader.getValue("pageSize"));
 
         pageNo = (pageNo == 0) ? 1 : pageNo;
         pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
 
-        PatientBean bean = (PatientBean) populateBean(req);
+        PatientBean bean = (PatientBean) populateBean(request);
         PatientModel model = new PatientModel();
 
-        String op = DataUtility.getString(req.getParameter("operation"));
-        String[] ids = req.getParameterValues("ids");
+        String op = DataUtility.getString(request.getParameter("operation"));
+        String[] ids = request.getParameterValues("ids");
 
         try {
             if (OP_SEARCH.equalsIgnoreCase(op) || OP_NEXT.equalsIgnoreCase(op) || OP_PREVIOUS.equalsIgnoreCase(op)) {
@@ -159,7 +159,7 @@ public class PatientListCtl extends BaseCtl {
                 }
 
             } else if (OP_NEW.equalsIgnoreCase(op)) {
-                ServletUtility.redirect(ORSView.PATIENT_CTL, req, resp);
+                ServletUtility.redirect(ORSView.PATIENT_CTL, request, response);
                 return;
 
             } else if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -169,14 +169,14 @@ public class PatientListCtl extends BaseCtl {
                     for (String id : ids) {
                         deleteBean.setId(DataUtility.getInt(id));
                         model.delete(deleteBean.getId());
-                        ServletUtility.setSuccessMessage("Patient deleted successfully", req);
+                        ServletUtility.setSuccessMessage("Patient deleted successfully", request);
                     }
                 } else {
-                    ServletUtility.setErrorMessage("Select at least 1 id.", req);
+                    ServletUtility.setErrorMessage("Select at least 1 id.", request);
                 }
 
             } else if (OP_RESET.equalsIgnoreCase(op) || OP_BACK.equalsIgnoreCase(op)) {
-                ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, req, resp);
+                ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, request, response);
                 return;
             }
 
@@ -184,21 +184,21 @@ public class PatientListCtl extends BaseCtl {
             List next = model.search(bean, pageNo + 1, pageSize);
 
             if (list == null || list.size() == 0) {
-                ServletUtility.setErrorMessage("No record found", req);
+                ServletUtility.setErrorMessage("No record found", request);
             }
 
-            ServletUtility.setBean(bean, req);
-            ServletUtility.setList(list, req);
-            ServletUtility.setPageNo(pageNo, req);
-            ServletUtility.setPageSize(pageSize, req);
-            req.setAttribute("nextListSize", next.size());
+            ServletUtility.setBean(bean, request);
+            ServletUtility.setList(list, request);
+            ServletUtility.setPageNo(pageNo, request);
+            ServletUtility.setPageSize(pageSize, request);
+            request.setAttribute("nextListSize", next.size());
 
         } catch (ApplicationException e) {
             e.printStackTrace();
             return;
         }
         log.info("PatientListCtl doPost Method Ended");
-        ServletUtility.forward(getView(), req, resp);
+        ServletUtility.forward(getView(), request, response);
     }
 
     /**

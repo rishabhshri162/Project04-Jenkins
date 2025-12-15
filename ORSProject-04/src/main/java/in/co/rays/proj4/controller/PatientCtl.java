@@ -82,7 +82,6 @@ public class PatientCtl extends BaseCtl {
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		// TODO Auto-generated method stub
 		PatientBean bean = new PatientBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
@@ -98,43 +97,42 @@ public class PatientCtl extends BaseCtl {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		long id = DataUtility.getLong(req.getParameter("id"));
+		long id = DataUtility.getLong(request.getParameter("id"));
 
 		PatientModel model = new PatientModel();
 
 		if (id > 0) {
 			try {
 				PatientBean bean = model.findByPk(id);
-				ServletUtility.setBean(bean, req);
+				ServletUtility.setBean(bean, request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 				return;
 			}
 		}
-		// TODO Auto-generated method stub
-		ServletUtility.forward(getView(), req, resp);
+		ServletUtility.forward(getView(), request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String op = DataUtility.getString(req.getParameter("operation"));
+		String op = DataUtility.getString(request.getParameter("operation"));
 		
-		long id = DataUtility.getLong(req.getParameter("id"));
+		long id = DataUtility.getLong(request.getParameter("id"));
 		
 		PatientModel model = new PatientModel();
 		
 		if (OP_SAVE.equalsIgnoreCase(op)) {
-			PatientBean bean = (PatientBean) populateBean(req);
+			PatientBean bean = (PatientBean) populateBean(request);
 			try {
 				model.add(bean);
-				ServletUtility.setBean(bean, req);
-				ServletUtility.setSuccessMessage("Patient added successfully", req);
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setSuccessMessage("Patient added successfully", request);
 			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, req);
-				ServletUtility.setErrorMessage("Patient already exists", req);
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Patient already exists", request);
 				
 			} catch (ApplicationException e) {
 				e.printStackTrace();
@@ -143,29 +141,29 @@ public class PatientCtl extends BaseCtl {
 			}
 
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.PATIENT_CTL, req, resp);
+			ServletUtility.redirect(ORSView.PATIENT_CTL, request, response);
 			return;
 		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
-			PatientBean bean = (PatientBean) populateBean(req);
+			PatientBean bean = (PatientBean) populateBean(request);
 			try {
 				if (id > 0) {
 					model.update(bean);
 				}
-				ServletUtility.setBean(bean, req);
-				ServletUtility.setSuccessMessage("Patient updated successfully", req);
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setSuccessMessage("Patient updated successfully", request);
 			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, req);
-				ServletUtility.setErrorMessage("Patient already exists", req);
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Patient already exists", request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 				return;
 			}
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, req, resp);
+			ServletUtility.redirect(ORSView.PATIENT_LIST_CTL, request, response);
 			return;
 		}
 
-		ServletUtility.forward(getView(), req, resp);
+		ServletUtility.forward(getView(), request, response);
 	}
 
 	@Override

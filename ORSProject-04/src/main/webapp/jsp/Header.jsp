@@ -55,6 +55,7 @@
         <a href="<%=ORSView.PATIENT_CTL%>"><b>Add Patient</b></a> |
         <a href="<%=ORSView.PATIENT_LIST_CTL%>"><b>Patient List</b></a> |
         <a href="<%=ORSView.COLLEGE_LIST_CTL%>"><b>College List</b></a> |
+        <a href="<%=ORSView.FOLLOWUP_CTL%>"><b>Follow Up</b></a> |
 
 
     <% } %>
