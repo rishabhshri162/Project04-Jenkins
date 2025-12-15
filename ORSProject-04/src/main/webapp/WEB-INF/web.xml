@@ -11,7 +11,7 @@
 	
 	<error-page>
   <error-code>404</error-code>
-  <location>/ErrorView.jsp</location>
+  <location>/ErrorCtl</location>
   </error-page>
 
 
