@@ -288,8 +288,8 @@ public class PatientModel {
 				sql.append(" AND id=").append(bean.getId());
 			if (bean.getName() != null && !bean.getName().isEmpty())
 				sql.append(" AND name LIKE '").append(bean.getName()).append("%'");
-			if (bean.getDateOfVisit() != null)
-				sql.append(" AND date_of_visit LIKE '").append(new java.sql.Date(bean.getDateOfVisit().getTime()))
+			if (bean.getDateOfVisit() != null && bean.getDateOfVisit().getTime() > 0)
+				sql.append(" AND dateOfVisit LIKE '").append(new java.sql.Date(bean.getDateOfVisit().getTime()))
 						.append("%'");
 			if (bean.getDisease() != null && !bean.getDisease().isEmpty())
 				sql.append(" AND disease LIKE '").append(bean.getDisease()).append("%'");
