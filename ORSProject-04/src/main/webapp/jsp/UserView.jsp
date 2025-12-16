@@ -78,13 +78,6 @@
 						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
 				</tr>
-				<tr>
-					<th align="left">Password<span style="color: red">*</span></th>
-					<td><input type="password" name="password"
-						placeholder="Enter Password"
-						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
-					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
-				</tr>
 				
 				<%
 					if (bean != null && bean.getId() > 0) {
@@ -92,6 +85,13 @@
 				<%
 					} else {
 				%>
+				<tr>
+					<th align="left">Password<span style="color: red">*</span></th>
+					<td><input type="password" name="password"
+						placeholder="Enter Password"
+						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
+					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
+				</tr>
 				<tr>
 					<th align="left">Confirm Password<span style="color: red">*</span></th>
 					<td><input type="password" name="confirmPassword"
