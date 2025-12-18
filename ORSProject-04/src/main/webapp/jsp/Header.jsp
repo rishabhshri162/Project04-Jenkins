@@ -48,13 +48,10 @@
         <a href="<%=ORSView.USER_LIST_CTL%>"><b>User List</b></a> |
         <a href="<%=ORSView.ROLE_CTL%>"><b>Add Role</b></a> |
         <a href="<%=ORSView.ROLE_LIST_CTL%>"><b>Role List</b></a> |
-
-        <!-- College menus (Admin only since College role removed) -->
         <a href="<%=ORSView.COLLEGE_CTL%>"><b>Add College</b></a> |
          <a href="<%=ORSView.COLLEGE_LIST_CTL%>"><b>College List</b></a> |
         <a href="<%=ORSView.PATIENT_CTL%>"><b>Add Patient</b></a> |
         <a href="<%=ORSView.PATIENT_LIST_CTL%>"><b>Patient List</b></a> |
-        <a href="<%=ORSView.COLLEGE_LIST_CTL%>"><b>College List</b></a> |
 
 
     <% } %>
