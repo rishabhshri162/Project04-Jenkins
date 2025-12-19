@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
@@ -20,6 +22,9 @@ import in.co.rays.proj4.util.JDBCDataSource;
  * version 1.0
  */
 public class RoleModel {
+	
+	
+	 private static Logger log = Logger.getLogger(RoleModel.class);
 
     /**
      * Returns the next primary key of st_role table.
@@ -30,6 +35,8 @@ public class RoleModel {
     public Integer nextPk() throws DatabaseException {
         Connection conn = null;
         int pk = 0;
+        
+        log.debug("nextPk() started");
 
         try {
             conn = JDBCDataSource.getConnection();
@@ -42,6 +49,9 @@ public class RoleModel {
 
             rs.close();
             pstmt.close();
+            
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
             throw new DatabaseException("Exception: Exception in getting pk");
         } finally {
@@ -63,6 +73,8 @@ public class RoleModel {
 
         Connection conn = null;
         int pk = 0;
+        
+        log.info("add() called for Role : " + bean.getName());
 
         RoleBean existBean = findByName(bean.getName());
         if (existBean != null) {
@@ -86,6 +98,7 @@ public class RoleModel {
             pstmt.executeUpdate();
             conn.commit();
             pstmt.close();
+            log.info("Role added successfully PK : " + pk);
 
         } catch (Exception e) {
             try { conn.rollback(); } 
@@ -109,6 +122,7 @@ public class RoleModel {
     public void delete(RoleBean bean) throws ApplicationException {
 
         Connection conn = null;
+        log.info("delete() called for Role ID : " + bean.getId());
 
         try {
             conn = JDBCDataSource.getConnection();
@@ -119,6 +133,7 @@ public class RoleModel {
             pstmt.executeUpdate();
 
             conn.commit();
+            log.info("Role deleted successfully ID : " + bean.getId());            
             pstmt.close();
 
         } catch (Exception e) {
@@ -142,6 +157,7 @@ public class RoleModel {
     public void update(RoleBean bean) throws ApplicationException, DuplicateRecordException {
 
         Connection conn = null;
+        log.info("update() called for Role ID : " + bean.getId());
 
         RoleBean existBean = findByName(bean.getName());
         if (existBean != null && existBean.getId() != bean.getId()) {
@@ -166,6 +182,7 @@ public class RoleModel {
 
             pstmt.executeUpdate();
             conn.commit();
+            log.info("Role updated successfully ID : " + bean.getId());
             pstmt.close();
 
         } catch (Exception e) {
@@ -187,6 +204,8 @@ public class RoleModel {
      * @throws ApplicationException if retrieval fails
      */
     public RoleBean findByPk(long pk) throws ApplicationException {
+    	
+    	log.debug("findByPk() called PK : " + pk);
 
         RoleBean bean = null;
        	Connection conn = null;
@@ -215,6 +234,7 @@ public class RoleModel {
             pstmt.close();
 
         } catch (Exception e) {
+        	  log.error("Exception in findByPk()", e);
             throw new ApplicationException("Exception: Exception in getting user by pk" + e.getMessage());
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -230,7 +250,8 @@ public class RoleModel {
      * @throws ApplicationException if retrieval fails
      */
     public RoleBean findByName(String name) throws ApplicationException {
-
+    	
+        log.debug("findByName() called Name : " + name);
         RoleBean bean = null;
         Connection conn = null;
 
@@ -258,6 +279,7 @@ public class RoleModel {
             pstmt.close();
 
         } catch (Exception e) {
+        	 log.error("Exception in findByName()", e);
             throw new ApplicationException("Exception: Exception in getting user by name" + e.getMessage());
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -273,6 +295,7 @@ public class RoleModel {
      * @throws ApplicationException if operation fails
      */
     public List<RoleBean> list() throws ApplicationException {
+        log.debug("list() called");
         return search(null, 0, 0);
     }
 
@@ -286,7 +309,8 @@ public class RoleModel {
      * @throws ApplicationException if search fails
      */
     public List<RoleBean> search(RoleBean bean, int pageNo, int pageSize) throws ApplicationException {
-
+         
+    	  log.debug("search() called");
         StringBuffer sql = new StringBuffer("select * from st_role where 1=1");
 
         if (bean != null) {
@@ -331,6 +355,7 @@ public class RoleModel {
             pstmt.close();
 
         } catch (Exception e) {
+        	 log.error("Exception in search()", e);
             throw new ApplicationException("Exception: Exception in search role" + e.getMessage());
         } finally {
             JDBCDataSource.closeConnection(conn);

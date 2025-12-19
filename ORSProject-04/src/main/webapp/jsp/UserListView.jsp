@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="in.co.rays.proj4.bean.RoleBean"%>
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="in.co.rays.proj4.util.HTMLUtility"%>
@@ -45,6 +46,7 @@
 
 				List<RoleBean> roleList = (List<RoleBean>) request.getAttribute("roleList");
 				List<UserBean> list = (List<UserBean>) ServletUtility.getList(request);
+				HashMap <String,String> map =(HashMap <String,String>)request.getAttribute("map");
 				Iterator<UserBean> it = list.iterator();
 
 				if (list.size() != 0) {
@@ -68,6 +70,7 @@
 						value="<%=ServletUtility.getParameter("dob", request)%>">&emsp;-->
 
 						<label><b>Role : </b></label> <%=HTMLUtility.getList("roleId", String.valueOf(bean.getRoleId()), roleList)%>&emsp;
+						<!--<label><b>Gender : </b></label> <%=HTMLUtility.getList("gender", String.valueOf(bean.getGender()), map)%>&emsp;-->
 
 						<input type="submit" name="operation"
 						value="<%=UserListCtl.OP_SEARCH%>"> &nbsp; <input
@@ -115,7 +118,7 @@
 					<td style="text-align: center;"><%=date%></td>
 					<td style="text-align: center; text-transform: capitalize;"><%=roleBean.getName()%></td>
 					<td style="text-align: center;"><a
-						href="<%=ORSView.USER_CTL%>?id=<%=bean.getId()%>"
+						href="<%=ORSView.USER_CTL%>?id=<%=bean.getId()%>"555
 						<%=(user.getId() == bean.getId() || bean.getRoleId() == RoleBean.ADMIN)
 							? "onclick='return false;'"
 							: ""%>>Edit</a>

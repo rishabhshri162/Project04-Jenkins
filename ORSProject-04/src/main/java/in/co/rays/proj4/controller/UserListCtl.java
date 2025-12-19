@@ -1,6 +1,7 @@
 package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -23,6 +24,12 @@ public class UserListCtl extends BaseCtl {
 	@Override
 	protected void preload(HttpServletRequest request) {
 		RoleModel roleModel = new RoleModel();
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("Female", "Female");
+		map.put("Male", "Male");
+
+		request.setAttribute("map", map);
 		try {
 			List roleList = roleModel.list();
 			request.setAttribute("roleList", roleList);
@@ -41,6 +48,7 @@ public class UserListCtl extends BaseCtl {
 		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
 		bean.setRoleId(DataUtility.getLong(request.getParameter("roleId")));
 		bean.setMobileNo(DataUtility.getString(request.getParameter("mob")));
+		bean.setGender(DataUtility.getString(request.getParameter("gender")));
 		
 
 		return bean;
