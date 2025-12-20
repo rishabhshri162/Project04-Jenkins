@@ -98,6 +98,12 @@ public interface ORSView {
     
     public String FOLLOWUP_VIEW = PAGE_FOLDER + "/FollowUpView.jsp";
     public String FOLLOWUP_CTL = APP_CONTEXT + "/ctl/FollowUpCtl";
+    
+    public String HOSTEL_ROOM_VIEW = PAGE_FOLDER + "/HostelRoomView.jsp";
+    public String HOSTEL_ROOM_CTL = APP_CONTEXT + "/ctl/HostelRoomCtl";
+    
+    public String HOSTEL_ROOM_LIST_VIEW = PAGE_FOLDER + "/HostelRoomListView.jsp";
+    public String HOSTEL_ROOM_LIST_CTL = APP_CONTEXT + "/ctl/HostelRoomListCtl";
 
 	
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
