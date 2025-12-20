@@ -12,7 +12,6 @@
 		<%@ include file="Header.jsp"%>
 		<br> <br> <br>
 		<h1 align="center">
-            <h2>19 dec 2025</h2>
 			<font size="10px" color="navy">Welcome to ORS</font>
 		</h1>
 
