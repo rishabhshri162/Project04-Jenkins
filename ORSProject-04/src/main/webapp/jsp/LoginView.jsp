@@ -23,7 +23,6 @@
 
 		<div align="center">
 			<h1>Login</h1>
-          <h1>19 dec 2025</h1>
 			
 			<div style="height: 15px; margin-bottom: 12px">
 				<H3 align="center">
