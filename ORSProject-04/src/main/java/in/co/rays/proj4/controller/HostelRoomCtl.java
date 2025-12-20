@@ -175,11 +175,11 @@ public class HostelRoomCtl extends BaseCtl {
             }
 
         } else if (OP_CANCEL.equalsIgnoreCase(op)) {
-//            ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
+          ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
             return;
 
         } else if (OP_RESET.equalsIgnoreCase(op)) {
-//            ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
+           ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
             return;
         }
 
