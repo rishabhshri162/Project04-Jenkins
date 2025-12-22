@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.co.rays.proj4.bean.HostelRoomBean;
+import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
@@ -72,8 +73,8 @@ public class HostelRoomModel {
 			ps.setLong(1, pk);
 			ps.setString(2, bean.getRoomNumber());
 			ps.setString(3, bean.getRoomType());
-			ps.setInt(4, bean.getCapacity());
-			ps.setDouble(5, bean.getRent());
+			ps.setString(4, bean.getCapacity());
+			ps.setString(5, bean.getRent());
 			ps.setString(6, bean.getStatus());
 			ps.setString(7, bean.getCreatedBy());
 			ps.setString(8, bean.getModifiedBy());
@@ -118,8 +119,8 @@ public class HostelRoomModel {
 
 			ps.setString(1, bean.getRoomNumber());
 			ps.setString(2, bean.getRoomType());
-			ps.setInt(3, bean.getCapacity());
-			ps.setDouble(4, bean.getRent());
+			ps.setString(3, bean.getCapacity());
+			ps.setString(4, bean.getRent());
 			ps.setString(5, bean.getStatus());
 			ps.setString(6, bean.getCreatedBy());
 			ps.setString(7, bean.getModifiedBy());
@@ -191,8 +192,8 @@ public class HostelRoomModel {
 				bean.setId(rs.getLong(1));
 				bean.setRoomNumber(rs.getString(2));
 				bean.setRoomType(rs.getString(3));
-				bean.setCapacity(rs.getInt(4));
-				bean.setRent(rs.getInt(5));
+				bean.setCapacity(rs.getString(4));
+				bean.setRent(rs.getString(5));
 				bean.setStatus(rs.getString(6));
 				bean.setCreatedBy(rs.getString(7));
 				bean.setModifiedBy(rs.getString(8));
@@ -228,8 +229,8 @@ public class HostelRoomModel {
 				bean.setId(rs.getLong(1));
 				bean.setRoomNumber(rs.getString(2));
 				bean.setRoomType(rs.getString(3));
-				bean.setCapacity(rs.getInt(4));
-				bean.setRent(rs.getInt(5));
+				bean.setCapacity(rs.getString(4));
+				bean.setRent(rs.getString(5));
 				bean.setStatus(rs.getString(6));
 			}
 			rs.close();
@@ -254,8 +255,10 @@ public class HostelRoomModel {
 		StringBuffer sql = new StringBuffer("select * from st_hostel where 1=1");
 
 		if (bean != null) {
-			if (bean.getRoomNumber() != null && bean.getRoomNumber().length() > 0)
-				sql.append(" and room_number like '" + bean.getRoomNumber() + "%'");
+			if (bean.getRoomNumber() != null && bean.getRoomNumber().trim().length() > 0) {
+			    sql.append(" and room_number = '" + bean.getRoomNumber() + "'");
+			}
+
 			if (bean.getRoomType() != null && bean.getRoomType().length() > 0)
 				sql.append(" and room_type like '" + bean.getRoomType() + "%'");
 			if (bean.getStatus() != null && bean.getStatus().length() > 0)
@@ -277,8 +280,8 @@ public class HostelRoomModel {
 				bean.setId(rs.getLong(1));
 				bean.setRoomNumber(rs.getString(2));
 				bean.setRoomType(rs.getString(3));
-				bean.setCapacity(rs.getInt(4));
-				bean.setRent(rs.getInt(5));
+				bean.setCapacity(rs.getString(4));
+				bean.setRent(rs.getString(5));
 				bean.setStatus(rs.getString(6));
 				list.add(bean);
 			}
@@ -299,4 +302,5 @@ public class HostelRoomModel {
 	public List<HostelRoomBean> list() throws ApplicationException {
 		return search(null, 0, 0);
 	}
+
 }

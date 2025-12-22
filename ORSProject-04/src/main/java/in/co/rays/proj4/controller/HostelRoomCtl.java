@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.HostelRoomBean;
+import in.co.rays.proj4.bean.RoomTypeBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.model.HostelRoomModel;
+import in.co.rays.proj4.model.RoomTypeModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.PropertyReader;
@@ -22,172 +24,178 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "HostelRoomCtl", urlPatterns = { "/ctl/HostelRoomCtl" })
 public class HostelRoomCtl extends BaseCtl {
 
-    /**
-     * Preload Status dropdown
-     */
-    @Override
-    protected void preload(HttpServletRequest request) {
+	/**
+	 * Preload Status dropdown
+	 */
+	@Override
+	protected void preload(HttpServletRequest request) {
+		// dynamic
+		RoomTypeModel model = new RoomTypeModel();
+		List<RoomTypeBean> roomTypeList = model.list();
 
-        HashMap<String, String> statusMap = new HashMap<>();
-        statusMap.put("Available", "Available");
-        statusMap.put("Occupied", "Occupied");
+		request.setAttribute("roomTypeList", roomTypeList);
 
-        request.setAttribute("statusMap", statusMap);
-    }
+		// static
+		HashMap<String, String> statusMap = new HashMap<>();
 
-    /**
-     * Validation
-     */
-    @Override
-    protected boolean validate(HttpServletRequest request) {
+		statusMap.put("Occupied", "Occupied");
+		statusMap.put("Available", "Available");
 
-        boolean pass = true;
+		request.setAttribute("statusMap", statusMap);
+	}
 
-        if (DataValidator.isNull(request.getParameter("roomNumber"))) {
-            request.setAttribute("roomNumber",
-                    PropertyReader.getValue("error.require", "Room Number"));
-            pass = false;
-        }
+	/**
+	 * Validation
+	 */
+	@Override
+	protected boolean validate(HttpServletRequest request) {
 
-        if (DataValidator.isNull(request.getParameter("roomType"))) {
-            request.setAttribute("roomType",
-                    PropertyReader.getValue("error.require", "Room Type"));
-            pass = false;
-        }
+		boolean pass = true;
 
-        if (DataValidator.isNull(request.getParameter("capacity"))) {
-            request.setAttribute("capacity",
-                    PropertyReader.getValue("error.require", "Capacity"));
-            pass = false;
-        } else if (!DataValidator.isInteger(request.getParameter("capacity"))) {
-            request.setAttribute("capacity", "Capacity must be numeric");
-            pass = false;
-        }
+		if (DataValidator.isNull(request.getParameter("roomNumber"))) {
+			request.setAttribute("roomNumber", "Room Number is required");
+			pass = false;
 
-        if (DataValidator.isNull(request.getParameter("rent"))) {
-            request.setAttribute("rent",
-                    PropertyReader.getValue("error.require", "Rent"));
-            pass = false;
-        } else if (!DataValidator.isInteger(request.getParameter("rent"))) {
-            request.setAttribute("rent", "Rent must be numeric");
-            pass = false;
-        }
+		} else if (!DataValidator.isLong(request.getParameter("roomNumber"))) {
+			request.setAttribute("roomNumber", "Room Number must be numeric");
+			pass = false;
+		}
 
-        if (DataValidator.isNull(request.getParameter("status"))) {
-            request.setAttribute("status",
-                    PropertyReader.getValue("error.require", "Status"));
-            pass = false;
-        }
+		if (DataValidator.isNull(request.getParameter("roomType"))) {
+			request.setAttribute("roomType", PropertyReader.getValue("error.require", "Room Type"));
+			pass = false;
+		}
 
-        return pass;
-    }
+		if (DataValidator.isNull(request.getParameter("capacity"))) {
+			request.setAttribute("capacity", PropertyReader.getValue("error.require", "Capacity"));
+			pass = false;
+		} else if (!DataValidator.isLong(request.getParameter("capacity"))) {
+			request.setAttribute("capacity", "Capacity must be numeric");
+			pass = false;
+		}
 
-    /**
-     * Populate Bean
-     */
-    @Override
-    protected BaseBean populateBean(HttpServletRequest request) {
+		if (DataValidator.isNull(request.getParameter("rent"))) {
+			request.setAttribute("rent", PropertyReader.getValue("error.require", "Rent"));
+			pass = false;
+		} else if (!DataValidator.isLong(request.getParameter("rent"))) {
+			request.setAttribute("rent", "Rent must be numeric");
+			pass = false;
+		}
 
-        HostelRoomBean bean = new HostelRoomBean();
+		if (DataValidator.isNull(request.getParameter("status"))) {
+			request.setAttribute("status", PropertyReader.getValue("error.require", "Status"));
+			pass = false;
+		}
 
-        bean.setId(DataUtility.getLong(request.getParameter("id")));
-        bean.setRoomNumber(DataUtility.getString(request.getParameter("roomNumber")));
-        bean.setRoomType(DataUtility.getString(request.getParameter("roomType")));
-        bean.setCapacity(DataUtility.getInt(request.getParameter("capacity")));
-        bean.setRent(DataUtility.getInt(request.getParameter("rent")));
-        bean.setStatus(DataUtility.getString(request.getParameter("status")));
+		return pass;
+	}
 
-        populateDTO(bean, request);
+	/**
+	 * Populate Bean
+	 */
+	@Override
+	protected BaseBean populateBean(HttpServletRequest request) {
 
-        return bean;
-    }
+		HostelRoomBean bean = new HostelRoomBean();
 
-    /**
-     * GET
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		bean.setId(DataUtility.getLong(request.getParameter("id")));
+		bean.setRoomNumber(DataUtility.getString(request.getParameter("roomNumber")));
+		bean.setRoomType(DataUtility.getString(request.getParameter("roomType")));
+		bean.setCapacity(DataUtility.getString(request.getParameter("capacity")));
+		bean.setRent(DataUtility.getString(request.getParameter("rent")));
+		bean.setStatus(DataUtility.getString(request.getParameter("status")));
 
-        long id = DataUtility.getLong(request.getParameter("id"));
-        HostelRoomModel model = new HostelRoomModel();
+		populateDTO(bean, request);
 
-        if (id > 0) {
-            try {
-                HostelRoomBean bean = model.findByPk(id);
-                ServletUtility.setBean(bean, request);
-            } catch (ApplicationException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        ServletUtility.forward(getView(), request, response);
-    }
+		return bean;
+	}
 
-    /**
-     * POST
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	/**
+	 * GET
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String op = DataUtility.getString(request.getParameter("operation"));
-        long id = DataUtility.getLong(request.getParameter("id"));
+		long id = DataUtility.getLong(request.getParameter("id"));
+		HostelRoomModel model = new HostelRoomModel();
 
-        HostelRoomModel model = new HostelRoomModel();
+		if (id > 0) {
+			try {
+				HostelRoomBean bean = model.findByPk(id);
+				ServletUtility.setBean(bean, request);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		ServletUtility.forward(getView(), request, response);
+	}
 
-        if (OP_SAVE.equalsIgnoreCase(op)) {
+	/**
+	 * POST
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-            HostelRoomBean bean = (HostelRoomBean) populateBean(request);
+		String op = DataUtility.getString(request.getParameter("operation"));
+		long id = DataUtility.getLong(request.getParameter("id"));
 
-            try {
-                long pk = model.add(bean);
-                ServletUtility.setBean(bean, request);
-                ServletUtility.setSuccessMessage("Hostel Room added successfully", request);
+		HostelRoomModel model = new HostelRoomModel();
 
-            } catch (DuplicateRecordException e) {
-                ServletUtility.setBean(bean, request);
-                ServletUtility.setErrorMessage("Room Number already exists", request);
+		if (OP_SAVE.equalsIgnoreCase(op)) {
 
-            } catch (ApplicationException e) {
-                e.printStackTrace();
-                return;
-            }
+			HostelRoomBean bean = (HostelRoomBean) populateBean(request);
 
-        } else if (OP_UPDATE.equalsIgnoreCase(op)) {
+			try {
+				long pk = model.add(bean);
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setSuccessMessage("Hostel Room added successfully", request);
 
-            HostelRoomBean bean = (HostelRoomBean) populateBean(request);
+			} catch (DuplicateRecordException e) {
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Room Number already exists", request);
 
-            try {
-                if (id > 0) {
-                    model.update(bean);
-                }
-                ServletUtility.setBean(bean, request);
-                ServletUtility.setSuccessMessage("Hostel Room updated successfully", request);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				return;
+			}
 
-            } catch (DuplicateRecordException e) {
-                ServletUtility.setBean(bean, request);
-                ServletUtility.setErrorMessage("Room Number already exists", request);
+		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
 
-            } catch (ApplicationException e) {
-                e.printStackTrace();
-                return;
-            }
+			HostelRoomBean bean = (HostelRoomBean) populateBean(request);
 
-        } else if (OP_CANCEL.equalsIgnoreCase(op)) {
-          ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
-            return;
+			try {
+				if (id > 0) {
+					model.update(bean);
+				}
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setSuccessMessage("Hostel Room updated successfully", request);
 
-        } else if (OP_RESET.equalsIgnoreCase(op)) {
-           ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
-            return;
-        }
+			} catch (DuplicateRecordException e) {
+				ServletUtility.setBean(bean, request);
+				ServletUtility.setErrorMessage("Room Number already exists", request);
 
-        ServletUtility.forward(getView(), request, response);
-    }
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				return;
+			}
 
-    @Override
-    protected String getView() {
-        return ORSView.HOSTEL_ROOM_VIEW;
-    }
+		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
+			return;
+
+		} else if (OP_RESET.equalsIgnoreCase(op)) {
+			ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
+			return;
+		}
+
+		ServletUtility.forward(getView(), request, response);
+	}
+
+	@Override
+	protected String getView() {
+		return ORSView.HOSTEL_ROOM_VIEW;
+	}
 }

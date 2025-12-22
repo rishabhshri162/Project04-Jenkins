@@ -24,18 +24,15 @@
 
 	<div align="center">
 		<h1 align="center" style="margin-bottom: -15; color: navy;">
-			Hostel Room List
-		</h1>
+			Hostel Room List</h1>
 
 		<div style="height: 15px; margin-bottom: 12px">
 			<h3>
-				<font color="red">
-					<%=ServletUtility.getErrorMessage(request)%>
+				<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 				</font>
 			</h3>
 			<h3>
-				<font color="green">
-					<%=ServletUtility.getSuccessMessage(request)%>
+				<font color="green"> <%=ServletUtility.getSuccessMessage(request)%>
 				</font>
 			</h3>
 		</div>
@@ -46,49 +43,36 @@
 				int pageNo = ServletUtility.getPageNo(request);
 				int pageSize = ServletUtility.getPageSize(request);
 				int index = ((pageNo - 1) * pageSize) + 1;
-				int nextListSize =
-						DataUtility.getInt(request.getAttribute("nextListSize").toString());
+				int nextListSize = DataUtility.getInt(request.getAttribute("nextListSize").toString());
 
-				List<HostelRoomBean> list =
-						(List<HostelRoomBean>) ServletUtility.getList(request);
+				List<HostelRoomBean> list = (List<HostelRoomBean>) ServletUtility.getList(request);
+				 List<HostelRoomBean> roomTypeList = (List<HostelRoomBean>) request.getAttribute("roomTypeList");
 
-				HashMap<String, String> statusMap =
-						(HashMap<String, String>) request.getAttribute("statusMap");
+
+				HashMap<String, String> statusMap = (HashMap<String, String>) request.getAttribute("statusMap");
 
 				Iterator<HostelRoomBean> it = list.iterator();
 
 				if (list.size() != 0) {
 			%>
 
-			<input type="hidden" name="pageNo" value="<%=pageNo%>">
-			<input type="hidden" name="pageSize" value="<%=pageSize%>">
+			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
+				type="hidden" name="pageSize" value="<%=pageSize%>">
 
 			<!-- Search Panel -->
 			<table style="width: 100%">
 				<tr>
-					<td align="center">
-						<label><b>Room Number :</b></label>
-						<input type="text" name="roomNumber"
-							placeholder="Enter Room Number"
-							value="<%=ServletUtility.getParameter("roomNumber", request)%>">
+					<td align="center"><label><b>Room Number :</b></label> <input
+						type="text" name="roomNumber" placeholder="Enter Room Number"
+						value="<%=ServletUtility.getParameter("roomNumber", request)%>">
 						&emsp;
-
-						<label><b>Room Type :</b></label>
-						<input type="text" name="roomType"
-							placeholder="Single / Double"
-							value="<%=ServletUtility.getParameter("roomType", request)%>">
-						&emsp;
-
-						<label><b>Status :</b></label>
-						<%=HTMLUtility.getList("status", bean.getStatus(), statusMap)%>
-						&emsp;
-
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_SEARCH%>">
-						&nbsp;
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_RESET%>">
-					</td>
+						<label><b>Room Type :</b></label> 
+						<%=HTMLUtility.getList("roomType", bean.getRoomType(), roomTypeList)%>
+						&emsp; <label><b>Status :</b></label> <%=HTMLUtility.getList("status", bean.getStatus(), statusMap)%>
+						&emsp; <input type="submit" name="operation"
+						value="<%=HostelRoomListCtl.OP_SEARCH%>"> &nbsp; <input
+						type="submit" name="operation"
+						value="<%=HostelRoomListCtl.OP_RESET%>"></td>
 				</tr>
 			</table>
 
@@ -97,9 +81,7 @@
 			<!-- List Table -->
 			<table border="1" style="width: 100%; border: groove;">
 				<tr style="background-color: #e1e6f1e3;">
-					<th width="5%">
-						<input type="checkbox" id="selectall" />
-					</th>
+					<th width="5%"><input type="checkbox" id="selectall" /></th>
 					<th width="5%">S.No</th>
 					<th width="15%">Room Number</th>
 					<th width="15%">Room Type</th>
@@ -111,25 +93,24 @@
 
 				<%
 					while (it.hasNext()) {
-						bean = it.next();
+							bean = it.next();
 				%>
 
 				<tr>
-					<td style="text-align: center;">
-						<input type="checkbox" name="ids" class="case"
-							value="<%=bean.getId()%>">
-					</td>
+					<td style="text-align: center;"><input type="checkbox"
+						name="ids" class="case" value="<%=bean.getId()%>"></td>
 					<td style="text-align: center;"><%=index++%></td>
 					<td style="text-align: center;"><%=bean.getRoomNumber()%></td>
 					<td style="text-align: center;"><%=bean.getRoomType()%></td>
 					<td style="text-align: center;"><%=bean.getCapacity()%></td>
 					<td style="text-align: center;"><%=bean.getRent()%></td>
 					<td style="text-align: center;"><%=bean.getStatus()%></td>
-					<td style="text-align: center;">
-						<a href="<%=ORSView.HOSTEL_ROOM_CTL%>?id=<%=bean.getId()%>">
-							Edit
-						</a>
-					</td>
+					<td style="text-align: center;"><a
+						href="<%=ORSView.HOSTEL_ROOM_CTL%>?id=<%=bean.getId()%>"
+						<%="Occupied".equals(bean.getStatus()) ? "onclick='return false;'" : ""%>>
+							Edit </a></td>
+
+
 				</tr>
 
 				<%
@@ -140,27 +121,20 @@
 			<!-- Pagination & Actions -->
 			<table style="width: 100%">
 				<tr>
-					<td style="width: 25%">
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_PREVIOUS%>"
-							<%=pageNo > 1 ? "" : "disabled"%>>
+					<td style="width: 25%"><input type="submit" name="operation"
+						value="<%=HostelRoomListCtl.OP_PREVIOUS%>"
+						<%=pageNo > 1 ? "" : "disabled"%>></td>
+
+					<td align="center" style="width: 25%"><input type="submit"
+						name="operation" value="<%=HostelRoomListCtl.OP_NEW%>"></td>
+
+					<td align="center" style="width: 25%"><input type="submit"
+						name="operation" value="<%=HostelRoomListCtl.OP_DELETE%>">
 					</td>
 
-					<td align="center" style="width: 25%">
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_NEW%>">
-					</td>
-
-					<td align="center" style="width: 25%">
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_DELETE%>">
-					</td>
-
-					<td style="width: 25%" align="right">
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_NEXT%>"
-							<%=nextListSize != 0 ? "" : "disabled"%>>
-					</td>
+					<td style="width: 25%" align="right"><input type="submit"
+						name="operation" value="<%=HostelRoomListCtl.OP_NEXT%>"
+						<%=nextListSize != 0 ? "" : "disabled"%>></td>
 				</tr>
 			</table>
 
@@ -170,10 +144,8 @@
 
 			<table>
 				<tr>
-					<td align="right">
-						<input type="submit" name="operation"
-							value="<%=HostelRoomListCtl.OP_BACK%>">
-					</td>
+					<td align="right"><input type="submit" name="operation"
+						value="<%=HostelRoomListCtl.OP_BACK%>"></td>
 				</tr>
 			</table>
 

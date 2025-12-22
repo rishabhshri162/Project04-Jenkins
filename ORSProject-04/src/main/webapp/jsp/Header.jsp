@@ -69,7 +69,7 @@
 		}
 	%>
 
-	<!-- Faculty + Admin Menus (College role replaced with Faculty) -->
+	<!-- Faculty + Admin Menus -->
 	<%
 		if (user.getRoleId() == RoleBean.FACULTY || user.getRoleId() == RoleBean.ADMIN) {
 	%>

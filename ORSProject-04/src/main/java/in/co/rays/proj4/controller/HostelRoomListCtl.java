@@ -13,6 +13,7 @@ import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.HostelRoomBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.HostelRoomModel;
+import in.co.rays.proj4.model.RoomTypeModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
@@ -20,156 +21,158 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "HostelRoomListCtl", urlPatterns = { "/ctl/HostelRoomListCtl" })
 public class HostelRoomListCtl extends BaseCtl {
 
-    /**
-     * Preload Status dropdown
-     */
-    @Override
-    protected void preload(HttpServletRequest request) {
+	/**
+	 * Preload Status dropdown
+	 */
+	@Override
+	protected void preload(HttpServletRequest request) {
 
-        HashMap<String, String> statusMap = new HashMap<>();
-        statusMap.put("Available", "Available");
-        statusMap.put("Occupied", "Occupied");
+		HashMap<String, String> statusMap = new HashMap<>();
+		statusMap.put("Available", "Available");
+		statusMap.put("Occupied", "Occupied");
 
-        request.setAttribute("statusMap", statusMap);
-    }
+		request.setAttribute("statusMap", statusMap);
 
-    /**
-     * Populate search bean
-     */
-    @Override
-    protected BaseBean populateBean(HttpServletRequest request) {
+		RoomTypeModel model = new RoomTypeModel();
 
-        HostelRoomBean bean = new HostelRoomBean();
+		List roomTypeList = model.list();
+		request.setAttribute("roomTypeList", roomTypeList);
 
-        bean.setRoomNumber(DataUtility.getString(request.getParameter("roomNumber")));
-        bean.setRoomType(DataUtility.getString(request.getParameter("roomType")));
-        bean.setStatus(DataUtility.getString(request.getParameter("status")));
+	}
 
-        return bean;
-    }
+	/**
+	 * Populate search bean
+	 */
+	@Override
+	protected BaseBean populateBean(HttpServletRequest request) {
 
-    /**
-     * GET – default list
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		HostelRoomBean bean = new HostelRoomBean();
 
-        int pageNo = 1;
-        int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
+		bean.setRoomNumber(DataUtility.getString(request.getParameter("roomNumber")));
+		bean.setRoomType(DataUtility.getString(request.getParameter("roomType")));
+		bean.setStatus(DataUtility.getString(request.getParameter("status")));
 
-        HostelRoomBean bean = (HostelRoomBean) populateBean(request);
-        HostelRoomModel model = new HostelRoomModel();
+		return bean;
+	}
 
-        try {
-            List<HostelRoomBean> list = model.search(bean, pageNo, pageSize);
-            List<HostelRoomBean> next = model.search(bean, pageNo + 1, pageSize);
+	/**
+	 * GET – default list
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-            if (list == null || list.isEmpty()) {
-                ServletUtility.setErrorMessage("No record found", request);
-            }
+		int pageNo = 1;
+		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
-            ServletUtility.setList(list, request);
-            ServletUtility.setPageNo(pageNo, request);
-            ServletUtility.setPageSize(pageSize, request);
-            ServletUtility.setBean(bean, request);
-            request.setAttribute("nextListSize", next.size());
+		HostelRoomBean bean = (HostelRoomBean) populateBean(request);
+		HostelRoomModel model = new HostelRoomModel();
 
-            ServletUtility.forward(getView(), request, response);
+		try {
+			List<HostelRoomBean> list = model.search(bean, pageNo, pageSize);
+			List<HostelRoomBean> next = model.search(bean, pageNo + 1, pageSize);
 
-        } catch (ApplicationException e) {
-            e.printStackTrace();
-            return;
-        }
-    }
+			if (list == null || list.isEmpty()) {
+				ServletUtility.setErrorMessage("No record found", request);
+			}
 
-    /**
-     * POST – search, next, previous, delete, new, reset
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+			ServletUtility.setList(list, request);
+			ServletUtility.setPageNo(pageNo, request);
+			ServletUtility.setPageSize(pageSize, request);
+			ServletUtility.setBean(bean, request);
+			request.setAttribute("nextListSize", next.size());
 
-        List list = null;
-        List next = null;
+			ServletUtility.forward(getView(), request, response);
 
-        int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
-        int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			return;
+		}
+	}
 
-        pageNo = (pageNo == 0) ? 1 : pageNo;
-        pageSize = (pageSize == 0)
-                ? DataUtility.getInt(PropertyReader.getValue("page.size"))
-                : pageSize;
+	/**
+	 * POST – search, next, previous, delete, new, reset
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        HostelRoomBean bean = (HostelRoomBean) populateBean(request);
-        HostelRoomModel model = new HostelRoomModel();
+		List list = null;
+		List next = null;
 
-        String op = DataUtility.getString(request.getParameter("operation"));
-        String[] ids = request.getParameterValues("ids");
+		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
+		int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
 
-        try {
+		pageNo = (pageNo == 0) ? 1 : pageNo;
+		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
 
-            if (OP_SEARCH.equalsIgnoreCase(op)
-                    || OP_NEXT.equalsIgnoreCase(op)
-                    || OP_PREVIOUS.equalsIgnoreCase(op)) {
+		HostelRoomBean bean = (HostelRoomBean) populateBean(request);
+		HostelRoomModel model = new HostelRoomModel();
 
-                if (OP_SEARCH.equalsIgnoreCase(op)) {
-                    pageNo = 1;
-                } else if (OP_NEXT.equalsIgnoreCase(op)) {
-                    pageNo++;
-                } else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
-                    pageNo--;
-                }
+		String op = DataUtility.getString(request.getParameter("operation"));
+		String[] ids = request.getParameterValues("ids");
 
-            } else if (OP_NEW.equalsIgnoreCase(op)) {
-                ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
-                return;
+		try {
 
-            } else if (OP_DELETE.equalsIgnoreCase(op)) {
-                pageNo = 1;
-                if (ids != null && ids.length > 0) {
-                    HostelRoomBean deleteBean = new HostelRoomBean();
-                    for (String id : ids) {
-                        deleteBean.setId(DataUtility.getLong(id));
-                        model.delete(deleteBean);
-                    }
-                    ServletUtility.setSuccessMessage("Hostel Room deleted successfully", request);
-                } else {
-                    ServletUtility.setErrorMessage("Select at least one record", request);
-                }
+			if (OP_SEARCH.equalsIgnoreCase(op) || OP_NEXT.equalsIgnoreCase(op) || OP_PREVIOUS.equalsIgnoreCase(op)) {
 
-            } else if (OP_RESET.equalsIgnoreCase(op)) {
-                ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
-                return;
+				if (OP_SEARCH.equalsIgnoreCase(op)) {
+					pageNo = 1;
+				} else if (OP_NEXT.equalsIgnoreCase(op)) {
+					pageNo++;
+				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
+					pageNo--;
+				}
 
-            } else if (OP_BACK.equalsIgnoreCase(op)) {
-                ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
-                return;
-            }
+			} else if (OP_NEW.equalsIgnoreCase(op)) {
+				ServletUtility.redirect(ORSView.HOSTEL_ROOM_CTL, request, response);
+				return;
 
-            list = model.search(bean, pageNo, pageSize);
-            next = model.search(bean, pageNo + 1, pageSize);
+			} else if (OP_DELETE.equalsIgnoreCase(op)) {
+				pageNo = 1;
+				if (ids != null && ids.length > 0) {
+					HostelRoomBean deleteBean = new HostelRoomBean();
+					for (String id : ids) {
+						deleteBean.setId(DataUtility.getLong(id));
+						model.delete(deleteBean);
+					}
+					ServletUtility.setSuccessMessage("Hostel Room deleted successfully", request);
+				} else {
+					ServletUtility.setErrorMessage("Select at least one record", request);
+				}
 
-            if (list == null || list.size() == 0) {
-                ServletUtility.setErrorMessage("No record found", request);
-            }
+			} else if (OP_RESET.equalsIgnoreCase(op)) {
+				ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
+				return;
 
-            ServletUtility.setList(list, request);
-            ServletUtility.setPageNo(pageNo, request);
-            ServletUtility.setPageSize(pageSize, request);
-            ServletUtility.setBean(bean, request);
-            request.setAttribute("nextListSize", next.size());
+			} else if (OP_BACK.equalsIgnoreCase(op)) {
+				ServletUtility.redirect(ORSView.HOSTEL_ROOM_LIST_CTL, request, response);
+				return;
+			}
 
-            ServletUtility.forward(getView(), request, response);
+			list = model.search(bean, pageNo, pageSize);
+			next = model.search(bean, pageNo + 1, pageSize);
 
-        } catch (ApplicationException e) {
-            e.printStackTrace();
-            return;
-        }
-    }
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found", request);
+			}
 
-    @Override
-    protected String getView() {
-        return ORSView.HOSTEL_ROOM_LIST_VIEW;
-    }
+			ServletUtility.setList(list, request);
+			ServletUtility.setPageNo(pageNo, request);
+			ServletUtility.setPageSize(pageSize, request);
+			ServletUtility.setBean(bean, request);
+			request.setAttribute("nextListSize", next.size());
+
+			ServletUtility.forward(getView(), request, response);
+
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			return;
+		}
+	}
+
+	@Override
+	protected String getView() {
+		return ORSView.HOSTEL_ROOM_LIST_VIEW;
+	}
 }

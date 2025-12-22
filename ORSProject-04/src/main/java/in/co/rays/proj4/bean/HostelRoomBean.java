@@ -12,27 +12,28 @@ package in.co.rays.proj4.bean;
 public class HostelRoomBean extends BaseBean {
 
     /** Room Number */
-    private String roomNumber;
+    private String  roomNumber;
 
     /** Room Type (Single, Double, Triple) */
     private String roomType;
 
     /** Maximum capacity of the room */
-    private int capacity;
+    private String capacity;
 
     /** Monthly rent of the room */
-    private int rent;
+    private String rent;
+
 
     /** Room status (Available / Occupied) */
     private String status;
 
     /** Returns room number */
-    public String getRoomNumber() {
+    public String  getRoomNumber() {
         return roomNumber;
     }
 
     /** Sets room number */
-    public void setRoomNumber(String roomNumber) {
+    public void setRoomNumber(String  roomNumber) {
         this.roomNumber = roomNumber;
     }
 
@@ -47,22 +48,22 @@ public class HostelRoomBean extends BaseBean {
     }
 
     /** Returns room capacity */
-    public int getCapacity() {
+    public String getCapacity() {
         return capacity;
     }
 
     /** Sets room capacity */
-    public void setCapacity(int capacity) {
+    public void setCapacity(String capacity) {
         this.capacity = capacity;
     }
 
     /** Returns room rent */
-    public double getRent() {
+    public String getRent() {
         return rent;
     }
 
     /** Sets room rent */
-    public void setRent(int rent) {
+    public void setRent(String rent) {
         this.rent = rent;
     }
 
@@ -86,6 +87,6 @@ public class HostelRoomBean extends BaseBean {
 
     @Override
     public String getValue() {
-        return roomNumber;
+    	return String.valueOf(roomNumber);
     }
 }

@@ -53,8 +53,10 @@ public class LoginCtl extends BaseCtl {
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		UserBean bean = new UserBean();
+		
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
+		
 		return bean;
 	}
 
