@@ -51,7 +51,12 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
-
+	<a href="<%=ORSView.INVENTORY_CTL%>"><b>Add Inventory</b></a> |
+	<a href="<%=ORSView.INVENTORY_LIST_CTL%>"><b>Inventory List</b></a> |
+	<a href="<%=ORSView.CLIENT_CTL%>"><b>Add Client</b></a> |
+	<a href="<%=ORSView.CLIENT_LIST_CTL%>"><b>Client List</b></a> |
+	<a href="<%=ORSView.TRAIN_TICKET_CTL%>"><b>Add train</b></a> |
+	<a href="<%=ORSView.TRAIN_TICKET_LIST_CTL%>"><b>Train List</b></a> |
 	<a href="<%=ORSView.USER_CTL%>"><b>Add User</b></a> |
 	<a href="<%=ORSView.USER_LIST_CTL%>"><b>User List</b></a> |
 	<a href="<%=ORSView.ROLE_CTL%>"><b>Add Role</b></a> |
@@ -61,7 +66,8 @@
 	<a href="<%=ORSView.PATIENT_CTL%>"><b>Add Patient</b></a> |
 	<a href="<%=ORSView.PATIENT_LIST_CTL%>"><b>Patient List</b></a> |
 	<a href="<%=ORSView.HOSTEL_ROOM_CTL%>"><b>Add Hostel Room</b></a> |
-	<a href="<%=ORSView.HOSTEL_ROOM_LIST_CTL%>"><b>Hostel Room List</b></a> |
+	<a href="<%=ORSView.HOSTEL_ROOM_LIST_CTL%>"><b>Hostel Room List</b></a>
+	|
 
 
 

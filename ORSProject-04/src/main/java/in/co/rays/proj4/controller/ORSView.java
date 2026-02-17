@@ -6,11 +6,29 @@ public interface ORSView {
 	public String APP_CONTEXT = "/ORSProject-04";
 
 	public String PAGE_FOLDER = "/jsp";
-	
+
 	public String JAVADOC_PATH = "/doc";
 
 	public String WELCOME_VIEW = PAGE_FOLDER + "/Welcome.jsp";
 	public String WELCOME_CTL = APP_CONTEXT + "/WelcomeCtl";
+
+	public String TRAIN_TICKET_VIEW = PAGE_FOLDER + "/TrainTicketView.jsp";
+	public String TRAIN_TICKET_CTL = APP_CONTEXT + "/ctl/TrainTicketCtl";
+
+	public String TRAIN_TICKET_LIST_VIEW = PAGE_FOLDER + "/TrainTicketListView.jsp";
+	public String TRAIN_TICKET_LIST_CTL = APP_CONTEXT + "/ctl/TrainTicketListCtl";
+
+	public String CLIENT_VIEW = PAGE_FOLDER + "/ClientView.jsp";
+	public String CLIENT_CTL = APP_CONTEXT + "/ctl/ClientCtl";
+
+	public String CLIENT_LIST_VIEW = PAGE_FOLDER + "/ClientListView.jsp";
+	public String CLIENT_LIST_CTL = APP_CONTEXT + "/ctl/ClientListCtl";
+
+	public String INVENTORY_VIEW = PAGE_FOLDER + "/InventoryView.jsp";
+	public String INVENTORY_CTL = APP_CONTEXT + "/ctl/InventoryCtl";
+
+	public String INVENTORY_LIST_VIEW = PAGE_FOLDER + "/InventoryListView.jsp";
+	public String INVENTORY_LIST_CTL = APP_CONTEXT + "/ctl/InventoryListCtl";
 
 	public String USER_REGISTRATION_VIEW = PAGE_FOLDER + "/UserRegistrationView.jsp";
 	public String USER_REGISTRATION_CTL = APP_CONTEXT + "/UserRegistrationCtl";
@@ -89,24 +107,22 @@ public interface ORSView {
 
 	public String ERROR_VIEW = PAGE_FOLDER + "/ErrorView.jsp";
 	public String ERROR_CTL = APP_CONTEXT + "/ErrorCtl";
-	
-    public String PATIENT_VIEW = PAGE_FOLDER + "/PatientView.jsp";
-    public String PATIENT_CTL = APP_CONTEXT + "/ctl/PatientCtl";
 
-    public String PATIENT_LIST_VIEW = PAGE_FOLDER + "/PatientListView.jsp";
-    public String PATIENT_LIST_CTL = APP_CONTEXT + "/ctl/PatientListCtl";
-    
-    public String FOLLOWUP_VIEW = PAGE_FOLDER + "/FollowUpView.jsp";
-    public String FOLLOWUP_CTL = APP_CONTEXT + "/ctl/FollowUpCtl";
-    
-    public String HOSTEL_ROOM_VIEW = PAGE_FOLDER + "/HostelRoomView.jsp";
-    public String HOSTEL_ROOM_CTL = APP_CONTEXT + "/ctl/HostelRoomCtl";
-    
-    public String HOSTEL_ROOM_LIST_VIEW = PAGE_FOLDER + "/HostelRoomListView.jsp";
-    public String HOSTEL_ROOM_LIST_CTL = APP_CONTEXT + "/ctl/HostelRoomListCtl";
+	public String PATIENT_VIEW = PAGE_FOLDER + "/PatientView.jsp";
+	public String PATIENT_CTL = APP_CONTEXT + "/ctl/PatientCtl";
 
-	
+	public String PATIENT_LIST_VIEW = PAGE_FOLDER + "/PatientListView.jsp";
+	public String PATIENT_LIST_CTL = APP_CONTEXT + "/ctl/PatientListCtl";
+
+	public String FOLLOWUP_VIEW = PAGE_FOLDER + "/FollowUpView.jsp";
+	public String FOLLOWUP_CTL = APP_CONTEXT + "/ctl/FollowUpCtl";
+
+	public String HOSTEL_ROOM_VIEW = PAGE_FOLDER + "/HostelRoomView.jsp";
+	public String HOSTEL_ROOM_CTL = APP_CONTEXT + "/ctl/HostelRoomCtl";
+
+	public String HOSTEL_ROOM_LIST_VIEW = PAGE_FOLDER + "/HostelRoomListView.jsp";
+	public String HOSTEL_ROOM_LIST_CTL = APP_CONTEXT + "/ctl/HostelRoomListCtl";
+
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
-	
-	
+
 }

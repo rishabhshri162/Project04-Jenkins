@@ -23,6 +23,13 @@ public class DataValidator {
             return false;
         }
     }
+    
+    public static boolean isTrainNumber(String val) {
+	    if (val == null) {
+	        return false;
+	    }
+	    return val.matches("\\d{5}");
+	}
 
     /**
      * Checks whether a string is not null and not empty.
@@ -100,6 +107,22 @@ public class DataValidator {
             return false;
         }
     }
+    
+    
+    public static boolean isDouble(String val) {
+
+        if (isNull(val)) {
+            return false;
+        }
+
+        try {
+            Double.parseDouble(val);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
     /**
      * Validates roll number (2 letters + 3 digits).
