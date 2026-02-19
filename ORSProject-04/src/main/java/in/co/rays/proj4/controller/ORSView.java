@@ -123,6 +123,12 @@ public interface ORSView {
 	public String HOSTEL_ROOM_LIST_VIEW = PAGE_FOLDER + "/HostelRoomListView.jsp";
 	public String HOSTEL_ROOM_LIST_CTL = APP_CONTEXT + "/ctl/HostelRoomListCtl";
 
+	public String RESOURCE_VIEW = PAGE_FOLDER + "/ResourceView.jsp";
+	public String RESOURCE_CTL = APP_CONTEXT + "/ctl/ResourceCtl";
+
+	public String RESOURCE_LIST_VIEW = PAGE_FOLDER + "/ResourceListView.jsp";
+	public String RESOURCE_LIST_CTL = APP_CONTEXT + "/ctl/ResourceListCtl";
+
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
 }

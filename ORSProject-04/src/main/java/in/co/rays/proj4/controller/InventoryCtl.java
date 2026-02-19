@@ -50,10 +50,6 @@ public class InventoryCtl extends BaseCtl {
 		if (DataValidator.isNull(request.getParameter("stock"))) {
 			request.setAttribute("stock", "Stock is required");
 			pass = false;
-
-		} else if (!DataValidator.isInteger(request.getParameter("stock"))) {
-			request.setAttribute("stock", "Stock must be numeric");
-			pass = false;
 		}
 
 		if (DataValidator.isNull(request.getParameter("price"))) {
@@ -87,7 +83,6 @@ public class InventoryCtl extends BaseCtl {
 		bean.setStock(DataUtility.getString(request.getParameter("stock")));
 		bean.setPrice(DataUtility.getString(request.getParameter("price")));
 		bean.setQuantity(DataUtility.getString(request.getParameter("quantity")));
-
 		bean.setCreatedBy("admin");
 		bean.setModifiedBy("admin");
 		bean.setCreatedDatetime(new Timestamp(new Date().getTime()));
@@ -126,18 +121,21 @@ public class InventoryCtl extends BaseCtl {
 		String op = DataUtility.getString(request.getParameter("operation"));
 		InventoryModel model = new InventoryModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
-
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 
-			InventoryBean bean = (InventoryBean) populateBean(request);
+		    InventoryBean bean = (InventoryBean) populateBean(request);
 
-			try {
-				model.add(bean);
-				ServletUtility.setSuccessMessage("Inventory Added Successfully", request);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
+		    try {
+		        long pk = model.add(bean);
+		        InventoryBean newBean = model.findByPk(pk);
+
+		        ServletUtility.setBean(newBean, request);
+		        ServletUtility.setSuccessMessage("Inventory Added Successfully", request);
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return;
+		    }
 
 		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
 

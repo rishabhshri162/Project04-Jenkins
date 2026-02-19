@@ -11,82 +11,74 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
-import in.co.rays.proj4.bean.ClientBean;
+import in.co.rays.proj4.bean.ResourceBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
-import in.co.rays.proj4.model.ClientModel;
+import in.co.rays.proj4.model.ResourceModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.ServletUtility;
 
-@WebServlet(name = "ClientCtl", urlPatterns = { "/ctl/ClientCtl" })
-public class ClientCtl extends BaseCtl {
+@WebServlet(name = "ResourceCtl", urlPatterns = { "/ctl/ResourceCtl" })
+public class ResourceCtl extends BaseCtl {
 
-	// ================= PRELOAD =================
 	@Override
 	protected void preload(HttpServletRequest request) {
 
-		HashMap<String, String> priorityMap = new HashMap<>();
+		HashMap<String, String> statusMap = new HashMap<>();
 
-		priorityMap.put("High", "High");
-		priorityMap.put("Medium", "Medium");
-		priorityMap.put("Low", "Low");
+		statusMap.put("Active", "Active");
+		statusMap.put("Inactive", "Inactive");
+		statusMap.put("Blocked", "Blocked");
 
-		request.setAttribute("priorityMap", priorityMap);
+		request.setAttribute("statusMap", statusMap);
 	}
 
-	// ================= VALIDATE =================
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
 		boolean pass = true;
 
-		if (DataValidator.isNull(request.getParameter("clientName"))) {
-			request.setAttribute("clientName", "Client Name is required");
+		if (DataValidator.isNull(request.getParameter("resourceCode"))) {
+			request.setAttribute("resourceCode", "Resource Code is required");
 			pass = false;
-
-		} else if (!DataValidator.isName(request.getParameter("clientName"))) {
-			request.setAttribute("clientName", "Only alphabetical characters allowed");
-			pass = false;
-		}
-
-		if (DataValidator.isNull(request.getParameter("email"))) {
-			request.setAttribute("email", "Email is required");
-			pass = false;
-
-		} else if (!DataValidator.isEmail(request.getParameter("email"))) {
-			request.setAttribute("email", "Invalid Email format");
+		} else if (!DataValidator.isInteger(request.getParameter("resourceCode"))) {
+			request.setAttribute("resourceCode", "Only numeric characters allowed");
 			pass = false;
 		}
 
-		if (DataValidator.isNull(request.getParameter("phone"))) {
-			request.setAttribute("phone", "Phone number is required");
+		if (DataValidator.isNull(request.getParameter("resourceName"))) {
+			request.setAttribute("resourceName", "Resource Name is required");
 			pass = false;
 
-		} else if (!DataValidator.isPhoneNo(request.getParameter("phone"))) {
-			request.setAttribute("phone", "Invalid Phone number");
+		} else if (!DataValidator.isName(request.getParameter("resourceName"))) {
+			request.setAttribute("resourceName", "Only alphabitcal character allowed");
 			pass = false;
 		}
 
-		if (DataValidator.isNull(request.getParameter("priority"))) {
-			request.setAttribute("priority", "Priority is required");
+		if (DataValidator.isNull(request.getParameter("resourceType"))) {
+			request.setAttribute("resourceType", "Resource Type is required");
+			pass = false;
+		}
+
+		if (DataValidator.isNull(request.getParameter("resourceStatus"))) {
+			request.setAttribute("resourceStatus", "Status is required");
 			pass = false;
 		}
 
 		return pass;
 	}
 
-	// ================= POPULATE =================
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		ClientBean bean = new ClientBean();
+		ResourceBean bean = new ResourceBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-		bean.setClientName(DataUtility.getString(request.getParameter("clientName")));
-		bean.setEmail(DataUtility.getString(request.getParameter("email")));
-		bean.setPhone(DataUtility.getString(request.getParameter("phone")));
-		bean.setPriority(DataUtility.getString(request.getParameter("priority")));
+		bean.setResourceCode(DataUtility.getString(request.getParameter("resourceCode")));
+		bean.setResourceName(DataUtility.getString(request.getParameter("resourceName")));
+		bean.setResourceType(DataUtility.getString(request.getParameter("resourceType")));
+		bean.setResourceStatus(DataUtility.getString(request.getParameter("resourceStatus")));
 
 		bean.setCreatedBy("admin");
 		bean.setModifiedBy("admin");
@@ -98,17 +90,16 @@ public class ClientCtl extends BaseCtl {
 		return bean;
 	}
 
-	// ================= DO GET =================
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		long id = DataUtility.getLong(request.getParameter("id"));
-		ClientModel model = new ClientModel();
+		ResourceModel model = new ResourceModel();
 
 		if (id > 0) {
 			try {
-				ClientBean bean = model.findByPk(id);
+				ResourceBean bean = model.findByPk(id);
 				ServletUtility.setBean(bean, request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
@@ -119,28 +110,30 @@ public class ClientCtl extends BaseCtl {
 		ServletUtility.forward(getView(), request, response);
 	}
 
-	// ================= DO POST =================
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-		ClientModel model = new ClientModel();
+		ResourceModel model = new ResourceModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 
-			ClientBean bean = (ClientBean) populateBean(request);
+			ResourceBean bean = (ResourceBean) populateBean(request);
 
 			try {
 
 				model.add(bean);
 
 				ServletUtility.setBean(bean, request);
-				ServletUtility.setSuccessMessage("Client Added Successfully", request);
+				ServletUtility.setSuccessMessage("Resource Added Successfully", request);
+
 			} catch (DuplicateRecordException e) {
+
 				ServletUtility.setBean(bean, request);
-				ServletUtility.setErrorMessage("Login id already exists", request);
+				ServletUtility.setErrorMessage("Resource Code already exists", request);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
@@ -148,24 +141,28 @@ public class ClientCtl extends BaseCtl {
 
 		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
 
-			ClientBean bean = (ClientBean) populateBean(request);
+			ResourceBean bean = (ResourceBean) populateBean(request);
 
 			try {
 				if (id > 0) {
 					model.update(bean);
 				}
-				ServletUtility.setSuccessMessage("Client Updated Successfully", request);
+				ServletUtility.setSuccessMessage("Resource Updated Successfully", request);
+			} catch (DuplicateRecordException e) {
+				ServletUtility.setErrorMessage("Resource Code already exists", request);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
 
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.CLIENT_LIST_CTL, request, response);
+
+			ServletUtility.redirect(ORSView.RESOURCE_LIST_CTL, request, response);
 			return;
 
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
-			ServletUtility.redirect(ORSView.CLIENT_CTL, request, response);
+
+			ServletUtility.redirect(ORSView.RESOURCE_CTL, request, response);
 			return;
 		}
 
@@ -174,6 +171,6 @@ public class ClientCtl extends BaseCtl {
 
 	@Override
 	protected String getView() {
-		return ORSView.CLIENT_VIEW;
+		return ORSView.RESOURCE_VIEW;
 	}
 }

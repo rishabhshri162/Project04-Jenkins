@@ -53,6 +53,8 @@
 	%>
 	<a href="<%=ORSView.INVENTORY_CTL%>"><b>Add Inventory</b></a> |
 	<a href="<%=ORSView.INVENTORY_LIST_CTL%>"><b>Inventory List</b></a> |
+	<a href="<%=ORSView.RESOURCE_CTL%>"><b>Add Resource</b></a> |
+	<a href="<%=ORSView.RESOURCE_LIST_CTL%>"><b>Resource List</b></a> |
 	<a href="<%=ORSView.CLIENT_CTL%>"><b>Add Client</b></a> |
 	<a href="<%=ORSView.CLIENT_LIST_CTL%>"><b>Client List</b></a> |
 	<a href="<%=ORSView.TRAIN_TICKET_CTL%>"><b>Add train</b></a> |
