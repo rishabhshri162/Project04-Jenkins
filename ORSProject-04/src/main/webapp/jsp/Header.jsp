@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.LANGUAGE_CTL%>"><b>Add Language</b></a> |
+	<a href="<%=ORSView.LANGUAGE_LIST_CTL%>"><b>Language List</b></a> |
 	<a href="<%=ORSView.INVENTORY_CTL%>"><b>Add Inventory</b></a> |
 	<a href="<%=ORSView.INVENTORY_LIST_CTL%>"><b>Inventory List</b></a> |
 	<a href="<%=ORSView.RESOURCE_CTL%>"><b>Add Resource</b></a> |

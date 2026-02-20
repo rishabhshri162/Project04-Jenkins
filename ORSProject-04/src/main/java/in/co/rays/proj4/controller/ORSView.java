@@ -129,6 +129,12 @@ public interface ORSView {
 	public String RESOURCE_LIST_VIEW = PAGE_FOLDER + "/ResourceListView.jsp";
 	public String RESOURCE_LIST_CTL = APP_CONTEXT + "/ctl/ResourceListCtl";
 
+	public String LANGUAGE_VIEW = PAGE_FOLDER + "/LanguageView.jsp";
+	public String LANGUAGE_CTL = APP_CONTEXT + "/ctl/LanguageCtl";
+
+	public String LANGUAGE_LIST_VIEW = PAGE_FOLDER + "/LanguageListView.jsp";
+	public String LANGUAGE_LIST_CTL = APP_CONTEXT + "/ctl/LanguageListCtl";
+
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
 }
