@@ -135,6 +135,12 @@ public interface ORSView {
 	public String LANGUAGE_LIST_VIEW = PAGE_FOLDER + "/LanguageListView.jsp";
 	public String LANGUAGE_LIST_CTL = APP_CONTEXT + "/ctl/LanguageListCtl";
 
+	public String VENDOR_VIEW = PAGE_FOLDER + "/VendorView.jsp";
+	public String VENDOR_CTL = APP_CONTEXT + "/ctl/VendorCtl";
+
+	public String VENDOR_LIST_VIEW = PAGE_FOLDER + "/VendorListView.jsp";
+	public String VENDOR_LIST_CTL = APP_CONTEXT + "/ctl/VendorListCtl";
+
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
 }
