@@ -140,6 +140,13 @@ public interface ORSView {
 
 	public String VENDOR_LIST_VIEW = PAGE_FOLDER + "/VendorListView.jsp";
 	public String VENDOR_LIST_CTL = APP_CONTEXT + "/ctl/VendorListCtl";
+	
+	
+	public String ROLE1_VIEW = PAGE_FOLDER + "/Role1View.jsp";
+	public String ROLE1_CTL = APP_CONTEXT + "/ctl/Role1Ctl";
+
+	public String ROLE1_LIST_VIEW = PAGE_FOLDER + "/Role1ListView.jsp";
+	public String ROLE1_LIST_CTL = APP_CONTEXT + "/ctl/Role1ListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
