@@ -147,6 +147,13 @@ public interface ORSView {
 
 	public String ROLE1_LIST_VIEW = PAGE_FOLDER + "/Role1ListView.jsp";
 	public String ROLE1_LIST_CTL = APP_CONTEXT + "/ctl/Role1ListCtl";
+	
+	
+	public String BATCH_VIEW = PAGE_FOLDER + "/BatchView.jsp";
+	public String BATCH_CTL = APP_CONTEXT + "/ctl/BatchCtl";
+
+	public String BATCH_LIST_VIEW = PAGE_FOLDER + "/BatchListView.jsp";
+	public String BATCH_LIST_CTL = APP_CONTEXT + "/ctl/BatchListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 

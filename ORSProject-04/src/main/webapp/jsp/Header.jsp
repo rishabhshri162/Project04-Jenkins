@@ -51,7 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
-	
+	<a href="<%=ORSView.BATCH_CTL%>"><b>Add Batch</b></a> |
+	<a href="<%=ORSView.BATCH_LIST_CTL%>"><b>Batch List</b></a> |
 	<a href="<%=ORSView.ROLE1_CTL%>"><b>Add Role Module</b></a> |
 	<a href="<%=ORSView.ROLE1_LIST_CTL%>"><b>Role Module List</b></a> |
 	<a href="<%=ORSView.VENDOR_CTL%>"><b>Add Vendor</b></a> |

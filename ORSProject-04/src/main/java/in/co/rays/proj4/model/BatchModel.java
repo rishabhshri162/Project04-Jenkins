@@ -1,4 +1,3 @@
-
 package in.co.rays.proj4.model;
 
 import java.sql.Connection;
@@ -7,14 +6,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.co.rays.proj4.bean.Role1Bean;
+import in.co.rays.proj4.bean.BatchBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
-public class Role1Model {
+public class BatchModel {
 
+	// ================= NEXT PK =================
 
 	public Integer nextPk() throws DatabaseException {
 
@@ -23,7 +23,7 @@ public class Role1Model {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_role1");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_batch");
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -43,15 +43,17 @@ public class Role1Model {
 		return pk + 1;
 	}
 
+	// ================= ADD =================
 
-	public long add(Role1Bean bean) throws ApplicationException, DuplicateRecordException {
+	public long add(BatchBean bean)
+			throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
 		int pk = 0;
 
-		Role1Bean existBean = findByCode(bean.getRoleCode());
+		BatchBean existBean = findByCode(bean.getBatchCode());
 		if (existBean != null) {
-			throw new DuplicateRecordException("Role Code already exists");
+			throw new DuplicateRecordException("Batch Code already exists");
 		}
 
 		try {
@@ -60,13 +62,14 @@ public class Role1Model {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 
-			PreparedStatement pstmt = conn.prepareStatement("insert into st_role1 values(?,?,?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn
+					.prepareStatement("insert into st_batch values(?,?,?,?,?,?,?,?,?)");
 
 			pstmt.setInt(1, pk);
-			pstmt.setString(2, bean.getRoleCode());
-			pstmt.setString(3, bean.getRoleName());
-			pstmt.setString(4, bean.getRoleDescription());
-			pstmt.setString(5, bean.getStatus());
+			pstmt.setString(2, bean.getBatchCode());
+			pstmt.setString(3, bean.getBatchName());
+			pstmt.setString(4, bean.getTrainerName());
+			pstmt.setString(5, bean.getBatchTiming());
 			pstmt.setString(6, bean.getCreatedBy());
 			pstmt.setString(7, bean.getModifiedBy());
 			pstmt.setTimestamp(8, bean.getCreatedDatetime());
@@ -84,7 +87,7 @@ public class Role1Model {
 				throw new ApplicationException("Add rollback exception");
 			}
 
-			throw new ApplicationException("Exception in adding Role");
+			throw new ApplicationException("Exception in adding Batch");
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -93,14 +96,16 @@ public class Role1Model {
 		return pk;
 	}
 
+	// ================= UPDATE =================
 
-	public void update(Role1Bean bean) throws ApplicationException, DuplicateRecordException {
+	public void update(BatchBean bean)
+			throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
 
-		Role1Bean existBean = findByCode(bean.getRoleCode());
+		BatchBean existBean = findByCode(bean.getBatchCode());
 		if (existBean != null && existBean.getId() != bean.getId()) {
-			throw new DuplicateRecordException("Role Code already exists");
+			throw new DuplicateRecordException("Batch Code already exists");
 		}
 
 		try {
@@ -108,14 +113,14 @@ public class Role1Model {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 
-			PreparedStatement pstmt = conn
-					.prepareStatement("update st_role1 set role_code=?, role_name=?, role_description=?, status=?, "
+			PreparedStatement pstmt = conn.prepareStatement(
+					"update st_batch set batch_code=?, batch_name=?, trainer_name=?, batch_timing=?, "
 							+ "created_by=?, modified_by=?, created_datetime=?, modified_datetime=? where id=?");
 
-			pstmt.setString(1, bean.getRoleCode());
-			pstmt.setString(2, bean.getRoleName());
-			pstmt.setString(3, bean.getRoleDescription());
-			pstmt.setString(4, bean.getStatus());
+			pstmt.setString(1, bean.getBatchCode());
+			pstmt.setString(2, bean.getBatchName());
+			pstmt.setString(3, bean.getTrainerName());
+			pstmt.setString(4, bean.getBatchTiming());
 			pstmt.setString(5, bean.getCreatedBy());
 			pstmt.setString(6, bean.getModifiedBy());
 			pstmt.setTimestamp(7, bean.getCreatedDatetime());
@@ -134,7 +139,7 @@ public class Role1Model {
 				throw new ApplicationException("Update rollback exception");
 			}
 
-			throw new ApplicationException("Exception in updating Role");
+			throw new ApplicationException("Exception in updating Batch");
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -143,7 +148,7 @@ public class Role1Model {
 
 	// ================= DELETE =================
 
-	public void delete(Role1Bean bean) throws ApplicationException {
+	public void delete(BatchBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -152,7 +157,8 @@ public class Role1Model {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 
-			PreparedStatement pstmt = conn.prepareStatement("delete from st_role1 where id=?");
+			PreparedStatement pstmt = conn
+					.prepareStatement("delete from st_batch where id=?");
 
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
@@ -168,7 +174,7 @@ public class Role1Model {
 				throw new ApplicationException("Delete rollback exception");
 			}
 
-			throw new ApplicationException("Exception in deleting Role");
+			throw new ApplicationException("Exception in deleting Batch");
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -177,28 +183,29 @@ public class Role1Model {
 
 	// ================= FIND BY PK =================
 
-	public Role1Bean findByPk(long pk) throws ApplicationException {
+	public BatchBean findByPk(long pk) throws ApplicationException {
 
-		Role1Bean bean = null;
+		BatchBean bean = null;
 		Connection conn = null;
 
 		try {
 
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select * from st_role1 where id=?");
+			PreparedStatement pstmt = conn
+					.prepareStatement("select * from st_batch where id=?");
 
 			pstmt.setLong(1, pk);
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 
-				bean = new Role1Bean();
+				bean = new BatchBean();
 
 				bean.setId(rs.getLong(1));
-				bean.setRoleCode(rs.getString(2));
-				bean.setRoleName(rs.getString(3));
-				bean.setRoleDescription(rs.getString(4));
-				bean.setStatus(rs.getString(5));
+				bean.setBatchCode(rs.getString(2));
+				bean.setBatchName(rs.getString(3));
+				bean.setTrainerName(rs.getString(4));
+				bean.setBatchTiming(rs.getString(5));
 				bean.setCreatedBy(rs.getString(6));
 				bean.setModifiedBy(rs.getString(7));
 				bean.setCreatedDatetime(rs.getTimestamp(8));
@@ -209,7 +216,7 @@ public class Role1Model {
 			pstmt.close();
 
 		} catch (Exception e) {
-			throw new ApplicationException("Exception in getting Role by PK");
+			throw new ApplicationException("Exception in getting Batch by PK");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -219,28 +226,29 @@ public class Role1Model {
 
 	// ================= FIND BY CODE =================
 
-	public Role1Bean findByCode(String code) throws ApplicationException {
+	public BatchBean findByCode(String code) throws ApplicationException {
 
-		Role1Bean bean = null;
+		BatchBean bean = null;
 		Connection conn = null;
 
 		try {
 
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("select * from st_role1 where role_code=?");
+			PreparedStatement pstmt = conn
+					.prepareStatement("select * from st_batch where batch_code=?");
 
 			pstmt.setString(1, code);
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 
-				bean = new Role1Bean();
+				bean = new BatchBean();
 
 				bean.setId(rs.getLong(1));
-				bean.setRoleCode(rs.getString(2));
-				bean.setRoleName(rs.getString(3));
-				bean.setRoleDescription(rs.getString(4));
-				bean.setStatus(rs.getString(5));
+				bean.setBatchCode(rs.getString(2));
+				bean.setBatchName(rs.getString(3));
+				bean.setTrainerName(rs.getString(4));
+				bean.setBatchTiming(rs.getString(5));
 				bean.setCreatedBy(rs.getString(6));
 				bean.setModifiedBy(rs.getString(7));
 				bean.setCreatedDatetime(rs.getTimestamp(8));
@@ -251,7 +259,7 @@ public class Role1Model {
 			pstmt.close();
 
 		} catch (Exception e) {
-			throw new ApplicationException("Exception in getting Role by Code");
+			throw new ApplicationException("Exception in getting Batch by Code");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -261,25 +269,30 @@ public class Role1Model {
 
 	// ================= SEARCH =================
 
-	public List<Role1Bean> search(Role1Bean bean, int pageNo, int pageSize) throws ApplicationException {
+	public List<BatchBean> search(BatchBean bean, int pageNo, int pageSize)
+			throws ApplicationException {
 
 		Connection conn = null;
-		ArrayList<Role1Bean> list = new ArrayList<>();
+		ArrayList<BatchBean> list = new ArrayList<>();
 
-		StringBuffer sql = new StringBuffer("select * from st_role1 where 1=1");
+		StringBuffer sql = new StringBuffer("select * from st_batch where 1=1");
 
 		if (bean != null) {
 
-			if (bean.getRoleCode() != null && bean.getRoleCode().length() > 0) {
-				sql.append(" and role_code like '" + bean.getRoleCode() + "%'");
+			if (bean.getBatchCode() != null && bean.getBatchCode().length() > 0) {
+				sql.append(" and batch_code like '" + bean.getBatchCode() + "%'");
 			}
 
-			if (bean.getRoleName() != null && bean.getRoleName().length() > 0) {
-				sql.append(" and role_name like '" + bean.getRoleName() + "%'");
+			if (bean.getBatchName() != null && bean.getBatchName().length() > 0) {
+				sql.append(" and batch_name like '" + bean.getBatchName() + "%'");
 			}
 
-			if (bean.getStatus() != null && bean.getStatus().length() > 0) {
-				sql.append(" and status like '" + bean.getStatus() + "%'");
+			if (bean.getTrainerName() != null && bean.getTrainerName().length() > 0) {
+				sql.append(" and trainer_name like '" + bean.getTrainerName() + "%'");
+			}
+			
+			if (bean.getBatchTiming() != null && bean.getBatchTiming().length() > 0) {
+			    sql.append(" and batch_timing = '" + bean.getBatchTiming() + "'");
 			}
 		}
 
@@ -297,26 +310,26 @@ public class Role1Model {
 
 			while (rs.next()) {
 
-				Role1Bean r = new Role1Bean();
+				BatchBean b = new BatchBean();
 
-				r.setId(rs.getLong(1));
-				r.setRoleCode(rs.getString(2));
-				r.setRoleName(rs.getString(3));
-				r.setRoleDescription(rs.getString(4));
-				r.setStatus(rs.getString(5));
-				r.setCreatedBy(rs.getString(6));
-				r.setModifiedBy(rs.getString(7));
-				r.setCreatedDatetime(rs.getTimestamp(8));
-				r.setModifiedDatetime(rs.getTimestamp(9));
+				b.setId(rs.getLong(1));
+				b.setBatchCode(rs.getString(2));
+				b.setBatchName(rs.getString(3));
+				b.setTrainerName(rs.getString(4));
+				b.setBatchTiming(rs.getString(5));
+				b.setCreatedBy(rs.getString(6));
+				b.setModifiedBy(rs.getString(7));
+				b.setCreatedDatetime(rs.getTimestamp(8));
+				b.setModifiedDatetime(rs.getTimestamp(9));
 
-				list.add(r);
+				list.add(b);
 			}
 
 			rs.close();
 			pstmt.close();
 
 		} catch (Exception e) {
-			throw new ApplicationException("Exception in searching Role");
+			throw new ApplicationException("Exception in searching Batch");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
