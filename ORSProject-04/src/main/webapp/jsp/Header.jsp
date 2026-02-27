@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.HOSPITAL_APPOINTMENT_CTL%>"><b>Add Hospital Appointment</b></a> |
+	<a href="<%=ORSView.HOSPITAL_APPOINTMENT_LIST_CTL%>"><b>Hospital Appointment List</b></a> |
 	<a href="<%=ORSView.BATCH_CTL%>"><b>Add Batch</b></a> |
 	<a href="<%=ORSView.BATCH_LIST_CTL%>"><b>Batch List</b></a> |
 	<a href="<%=ORSView.ROLE1_CTL%>"><b>Add Role Module</b></a> |

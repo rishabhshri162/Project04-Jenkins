@@ -154,6 +154,13 @@ public interface ORSView {
 
 	public String BATCH_LIST_VIEW = PAGE_FOLDER + "/BatchListView.jsp";
 	public String BATCH_LIST_CTL = APP_CONTEXT + "/ctl/BatchListCtl";
+	
+	
+	public String HOSPITAL_APPOINTMENT_VIEW = PAGE_FOLDER + "/HospitalAppointmentView.jsp";
+	public String HOSPITAL_APPOINTMENT_CTL = APP_CONTEXT + "/ctl/HospitalAppointmentCtl";
+
+	public String HOSPITAL_APPOINTMENT_LIST_VIEW = PAGE_FOLDER + "/HospitalAppointmentListView.jsp";
+	public String HOSPITAL_APPOINTMENT_LIST_CTL = APP_CONTEXT + "/ctl/HospitalAppointmentListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
