@@ -140,27 +140,30 @@ public interface ORSView {
 
 	public String VENDOR_LIST_VIEW = PAGE_FOLDER + "/VendorListView.jsp";
 	public String VENDOR_LIST_CTL = APP_CONTEXT + "/ctl/VendorListCtl";
-	
-	
+
 	public String ROLE1_VIEW = PAGE_FOLDER + "/Role1View.jsp";
 	public String ROLE1_CTL = APP_CONTEXT + "/ctl/Role1Ctl";
 
 	public String ROLE1_LIST_VIEW = PAGE_FOLDER + "/Role1ListView.jsp";
 	public String ROLE1_LIST_CTL = APP_CONTEXT + "/ctl/Role1ListCtl";
-	
-	
+
 	public String BATCH_VIEW = PAGE_FOLDER + "/BatchView.jsp";
 	public String BATCH_CTL = APP_CONTEXT + "/ctl/BatchCtl";
 
 	public String BATCH_LIST_VIEW = PAGE_FOLDER + "/BatchListView.jsp";
 	public String BATCH_LIST_CTL = APP_CONTEXT + "/ctl/BatchListCtl";
-	
-	
+
 	public String HOSPITAL_APPOINTMENT_VIEW = PAGE_FOLDER + "/HospitalAppointmentView.jsp";
 	public String HOSPITAL_APPOINTMENT_CTL = APP_CONTEXT + "/ctl/HospitalAppointmentCtl";
 
 	public String HOSPITAL_APPOINTMENT_LIST_VIEW = PAGE_FOLDER + "/HospitalAppointmentListView.jsp";
 	public String HOSPITAL_APPOINTMENT_LIST_CTL = APP_CONTEXT + "/ctl/HospitalAppointmentListCtl";
+
+	public String PARKING_VIEW = PAGE_FOLDER + "/ParkingView.jsp";
+	public String PARKING_CTL = APP_CONTEXT + "/ctl/ParkingCtl";
+
+	public String PARKING_LIST_VIEW = PAGE_FOLDER + "/ParkingListView.jsp";
+	public String PARKING_LIST_CTL = APP_CONTEXT + "/ctl/ParkingListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
