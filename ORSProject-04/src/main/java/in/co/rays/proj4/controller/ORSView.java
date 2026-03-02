@@ -164,6 +164,13 @@ public interface ORSView {
 
 	public String PARKING_LIST_VIEW = PAGE_FOLDER + "/ParkingListView.jsp";
 	public String PARKING_LIST_CTL = APP_CONTEXT + "/ctl/ParkingListCtl";
+	
+	
+	public String BOARDING_PASS_VIEW = PAGE_FOLDER + "/BoardingPassView.jsp";
+	public String BOARDING_PASS_CTL = APP_CONTEXT + "/ctl/BoardingPassCtl";
+
+	public String BOARDING_PASS_LIST_VIEW = PAGE_FOLDER + "/BoardingPassListView.jsp";
+	public String BOARDING_PASS_LIST_CTL = APP_CONTEXT + "/ctl/BoardingPassListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 

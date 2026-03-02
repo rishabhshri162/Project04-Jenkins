@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.BOARDING_PASS_CTL%>"><b>Add Boarding Pass</b></a> |
+	<a href="<%=ORSView.BOARDING_PASS_LIST_CTL%>"><b>Boarding Pass List</b></a> |
 	<a href="<%=ORSView.PARKING_CTL%>"><b>Add Parking</b></a> |
 	<a href="<%=ORSView.PARKING_LIST_CTL%>"><b>Parking List</b></a> |
 	<a href="<%=ORSView.HOSPITAL_APPOINTMENT_CTL%>"><b>Add Hospital Appointment</b></a> |

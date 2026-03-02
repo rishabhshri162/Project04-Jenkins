@@ -1,28 +1,27 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="in.co.rays.proj4.controller.ORSView"%>
-<%@page import="in.co.rays.proj4.controller.ParkingCtl"%>
+<%@page import="in.co.rays.proj4.controller.BoardingPassCtl"%>
 <%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="in.co.rays.proj4.util.HTMLUtility"%>
 
 <html>
 <head>
-<title>Add Parking</title>
+<title>Add Boarding Pass</title>
 <link rel="icon" type="image/png"
 	href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16" />
 </head>
 <body>
 
-	<form action="<%=ORSView.PARKING_CTL%>" method="post">
+	<form action="<%=ORSView.BOARDING_PASS_CTL%>" method="post">
 
 		<%@ include file="Header.jsp"%>
 
-		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.ParkingBean"
+		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.BoardingPassBean"
 			scope="request"></jsp:useBean>
 
 		<%
-			HashMap<String, String> parkingStatusMap = (HashMap<String, String>) request
-					.getAttribute("parkingStatusMap");
+			HashMap<String, String> gateMap = (HashMap<String, String>) request.getAttribute("gateMap");
 		%>
 
 		<div align="center">
@@ -31,11 +30,11 @@
 				<%
 					if (bean != null && bean.getId() > 0) {
 				%>
-				Update Parking
+				Update Boarding Pass
 				<%
 					} else {
 				%>
-				Add Parking
+				Add Boarding Pass
 				<%
 					}
 				%>
@@ -53,51 +52,39 @@
 
 			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
 				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
-
 			<input type="hidden" name="modifiedBy"
 				value="<%=bean.getModifiedBy()%>"> <input type="hidden"
 				name="createdDatetime"
 				value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
-
 			<input type="hidden" name="modifiedDatetime"
 				value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
 
 			<table>
 
 				<tr>
-					<th align="left">Parking Code</th>
-					<td><input type="text" name="parkingCode"
-						placeholder="Enter Parking Code"
-						value="<%=DataUtility.getStringData(bean.getParkingCode())%>">
+					<th align="left">Seat Number</th>
+					<td><input type="text" name="seatNumber"
+						placeholder="Enter Seat Number"
+						value="<%=DataUtility.getStringData(bean.getSeatNumber())%>">
 					</td>
-					<td><font color="red"> <%=ServletUtility.getErrorMessage("parkingCode", request)%>
+					<td><font color="red"> <%=ServletUtility.getErrorMessage("seatNumber", request)%>
 					</font></td>
 				</tr>
 
 				<tr>
-					<th align="left">Location</th>
-					<td><input type="text" name="location"
-						placeholder="Enter Location"
-						value="<%=DataUtility.getStringData(bean.getLocation())%>">
-					</td>
-					<td><font color="red"> <%=ServletUtility.getErrorMessage("location", request)%>
+					<th align="left">Gate</th>
+					<td><%=HTMLUtility.getList("gate", bean.getGate(), gateMap)%></td>
+					<td><font color="red"> <%=ServletUtility.getErrorMessage("gate", request)%>
 					</font></td>
 				</tr>
 
 				<tr>
-					<th align="left">Slot Number</th>
-					<td><input type="text" name="slotNumber"
-						placeholder="Enter Slot Number"
-						value="<%=DataUtility.getStringData(bean.getSlotNumber())%>">
+					<th align="left">Boarding Time</th>
+					<td><input type="text" name="boardingTime"
+						placeholder="dd-MM-yyyy HH:mm:ss"
+						value="<%=DataUtility.getStringData(bean.getBoardingTime())%>">
 					</td>
-					<td><font color="red"> <%=ServletUtility.getErrorMessage("slotNumber", request)%>
-					</font></td>
-				</tr>
-
-				<tr>
-					<th align="left">Parking Status</th>
-					<td><%=HTMLUtility.getList("parkingStatus", bean.getParkingStatus(), parkingStatusMap)%></td>
-					<td><font color="red"> <%=ServletUtility.getErrorMessage("parkingStatus", request)%>
+					<td><font color="red"> <%=ServletUtility.getErrorMessage("boardingTime", request)%>
 					</font></td>
 				</tr>
 
@@ -109,16 +96,17 @@
 					%>
 
 					<td><input type="submit" name="operation"
-						value="<%=ParkingCtl.OP_UPDATE%>"> <input type="submit"
-						name="operation" value="<%=ParkingCtl.OP_CANCEL%>"></td>
+						value="<%=BoardingPassCtl.OP_UPDATE%>"> <input
+						type="submit" name="operation"
+						value="<%=BoardingPassCtl.OP_CANCEL%>"></td>
 
 					<%
 						} else {
 					%>
 
 					<td><input type="submit" name="operation"
-						value="<%=ParkingCtl.OP_SAVE%>"> <input type="submit"
-						name="operation" value="<%=ParkingCtl.OP_RESET%>"></td>
+						value="<%=BoardingPassCtl.OP_SAVE%>"> <input type="submit"
+						name="operation" value="<%=BoardingPassCtl.OP_RESET%>"></td>
 
 					<%
 						}

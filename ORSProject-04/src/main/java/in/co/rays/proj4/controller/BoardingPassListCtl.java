@@ -10,39 +10,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.proj4.bean.BaseBean;
-import in.co.rays.proj4.bean.ParkingBean;
+import in.co.rays.proj4.bean.BoardingPassBean;
 import in.co.rays.proj4.exception.ApplicationException;
-import in.co.rays.proj4.model.ParkingModel;
+import in.co.rays.proj4.model.BoardingPassModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.PropertyReader;
 import in.co.rays.proj4.util.ServletUtility;
 
-@WebServlet(name = "ParkingListCtl", urlPatterns = { "/ctl/ParkingListCtl" })
-public class ParkingListCtl extends BaseCtl {
+@WebServlet(name = "BoardingPassListCtl", urlPatterns = { "/ctl/BoardingPassListCtl" })
+public class BoardingPassListCtl extends BaseCtl {
 
 	@Override
 	protected void preload(HttpServletRequest request) {
 
-		HashMap<String, String> parkingStatusMap = new HashMap<>();
+		HashMap<String, String> gateMap = new HashMap<>();
 
-		parkingStatusMap.put("Available", "Available");
-		parkingStatusMap.put("Occupied", "Occupied");
-		parkingStatusMap.put("Reserved", "Reserved");
-		parkingStatusMap.put("Maintenance", "Maintenance");
+		gateMap.put("A1", "A1");
+		gateMap.put("A2", "A2");
+		gateMap.put("B1", "B1");
+		gateMap.put("B2", "B2");
 
-		request.setAttribute("parkingStatusMap", parkingStatusMap);
+		request.setAttribute("gateMap", gateMap);
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		ParkingBean bean = new ParkingBean();
+		BoardingPassBean bean = new BoardingPassBean();
 
-		bean.setParkingCode(DataUtility.getString(request.getParameter("parkingCode")));
-
-		bean.setLocation(DataUtility.getString(request.getParameter("location")));
-
-		bean.setParkingStatus(DataUtility.getString(request.getParameter("parkingStatus")));
+		bean.setSeatNumber(DataUtility.getString(request.getParameter("seatNumber")));
+		bean.setGate(DataUtility.getString(request.getParameter("gate")));
 
 		return bean;
 	}
@@ -54,14 +51,13 @@ public class ParkingListCtl extends BaseCtl {
 		int pageNo = 1;
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
-		ParkingBean bean = (ParkingBean) populateBean(request);
-		ParkingModel model = new ParkingModel();
+		BoardingPassBean bean = (BoardingPassBean) populateBean(request);
+		BoardingPassModel model = new BoardingPassModel();
 
 		try {
 
-			List<ParkingBean> list = model.search(bean, pageNo, pageSize);
-
-			List<ParkingBean> next = model.search(bean, pageNo + 1, pageSize);
+			List<BoardingPassBean> list = model.search(bean, pageNo, pageSize);
+			List<BoardingPassBean> next = model.search(bean, pageNo + 1, pageSize);
 
 			if (list == null || list.isEmpty()) {
 				ServletUtility.setErrorMessage("No record found", request);
@@ -88,18 +84,15 @@ public class ParkingListCtl extends BaseCtl {
 		List next = null;
 
 		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
-
 		int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
 
 		pageNo = (pageNo == 0) ? 1 : pageNo;
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
 
-		ParkingBean bean = (ParkingBean) populateBean(request);
-
-		ParkingModel model = new ParkingModel();
+		BoardingPassBean bean = (BoardingPassBean) populateBean(request);
+		BoardingPassModel model = new BoardingPassModel();
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
 		String[] ids = request.getParameterValues("ids");
 
 		try {
@@ -118,7 +111,7 @@ public class ParkingListCtl extends BaseCtl {
 
 			} else if (OP_NEW.equalsIgnoreCase(op)) {
 
-				ServletUtility.redirect(ORSView.PARKING_CTL, request, response);
+				ServletUtility.redirect(ORSView.BOARDING_PASS_CTL, request, response);
 				return;
 
 			} else if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -127,14 +120,14 @@ public class ParkingListCtl extends BaseCtl {
 
 				if (ids != null && ids.length > 0) {
 
-					ParkingBean deleteBean = new ParkingBean();
+					BoardingPassBean deleteBean = new BoardingPassBean();
 
 					for (String id : ids) {
 						deleteBean.setId(DataUtility.getLong(id));
 						model.delete(deleteBean);
 					}
 
-					ServletUtility.setSuccessMessage("Parking deleted successfully", request);
+					ServletUtility.setSuccessMessage("Boarding Pass deleted successfully", request);
 
 				} else {
 					ServletUtility.setErrorMessage("Select at least one record", request);
@@ -142,7 +135,7 @@ public class ParkingListCtl extends BaseCtl {
 
 			} else if (OP_RESET.equalsIgnoreCase(op)) {
 
-				ServletUtility.redirect(ORSView.PARKING_LIST_CTL, request, response);
+				ServletUtility.redirect(ORSView.BOARDING_PASS_LIST_CTL, request, response);
 				return;
 			}
 
@@ -168,6 +161,6 @@ public class ParkingListCtl extends BaseCtl {
 
 	@Override
 	protected String getView() {
-		return ORSView.PARKING_LIST_VIEW;
+		return ORSView.BOARDING_PASS_LIST_VIEW;
 	}
 }
