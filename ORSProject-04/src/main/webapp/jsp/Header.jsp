@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.CLAIM_CTL%>"><b>Add Claim</b></a> |
+	<a href="<%=ORSView.CLAIM_LIST_CTL%>"><b>Claim List</b></a> |
 	<a href="<%=ORSView.BOARDING_PASS_CTL%>"><b>Add Boarding Pass</b></a> |
 	<a href="<%=ORSView.BOARDING_PASS_LIST_CTL%>"><b>Boarding Pass List</b></a> |
 	<a href="<%=ORSView.PARKING_CTL%>"><b>Add Parking</b></a> |

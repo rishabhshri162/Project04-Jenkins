@@ -56,6 +56,20 @@ public class DataUtility {
             return "";
         }
     }
+    
+    /**
+     * Converts a {@link String} to a {@code double}.
+     *
+     * @param val the string to convert
+     * @return double value if valid, otherwise returns 0.0
+     */
+    public static double getDouble(String val) {
+        if (DataValidator.isDouble(val)) {
+            return Double.parseDouble(val);
+        } else {
+            return 0.0;
+        }
+    }
 
     /**
      * Converts a {@link String} to an {@code int}.
