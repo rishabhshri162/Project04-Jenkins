@@ -176,6 +176,13 @@ public interface ORSView {
 	
 	public String CLAIM_LIST_VIEW = PAGE_FOLDER + "/ClaimListView.jsp";
 	public String CLAIM_LIST_CTL = APP_CONTEXT + "/ctl/ClaimListCtl";
+	
+	
+	public String SUBSCRIPTION_PLAN_VIEW = PAGE_FOLDER + "/SubscriptionPlanView.jsp";
+	public String SUBSCRIPTION_PLAN_CTL = APP_CONTEXT + "/ctl/SubscriptionPlanCtl";
+	
+	public String SUBSCRIPTION_PLAN_LIST_VIEW = PAGE_FOLDER + "/SubscriptionPlanListView.jsp";
+	public String SUBSCRIPTION_PLAN_LIST_CTL = APP_CONTEXT + "/ctl/SubscriptionPlanListCtl";
 
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
