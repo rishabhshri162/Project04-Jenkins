@@ -183,6 +183,13 @@ public interface ORSView {
 	
 	public String SUBSCRIPTION_PLAN_LIST_VIEW = PAGE_FOLDER + "/SubscriptionPlanListView.jsp";
 	public String SUBSCRIPTION_PLAN_LIST_CTL = APP_CONTEXT + "/ctl/SubscriptionPlanListCtl";
+	
+	
+	public String SPEAKER_VIEW = PAGE_FOLDER + "/SpeakerView.jsp";
+	public String SPEAKER_CTL = APP_CONTEXT + "/ctl/SpeakerCtl";
+	
+	public String SPEAKER_LIST_VIEW = PAGE_FOLDER + "/SpeakerListView.jsp";
+	public String SPEAKER_LIST_CTL = APP_CONTEXT + "/ctl/SpeakerListCtl";
 
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";

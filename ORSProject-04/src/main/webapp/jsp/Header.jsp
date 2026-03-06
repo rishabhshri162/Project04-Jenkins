@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.SPEAKER_CTL%>"><b>Add Speaker</b></a> |
+	<a href="<%=ORSView.SPEAKER_LIST_CTL%>"><b>Speaker List</b></a> |
 	<a href="<%=ORSView.SUBSCRIPTION_PLAN_CTL%>"><b>Add Subscription Plan</b></a> |
 	<a href="<%=ORSView.SUBSCRIPTION_PLAN_LIST_CTL%>"><b>Subscription Plan List</b></a> |
 	<a href="<%=ORSView.CLAIM_CTL%>"><b>Add Claim</b></a> |
