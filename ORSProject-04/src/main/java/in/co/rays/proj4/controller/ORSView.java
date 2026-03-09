@@ -164,33 +164,36 @@ public interface ORSView {
 
 	public String PARKING_LIST_VIEW = PAGE_FOLDER + "/ParkingListView.jsp";
 	public String PARKING_LIST_CTL = APP_CONTEXT + "/ctl/ParkingListCtl";
-	
+
 	public String BOARDING_PASS_VIEW = PAGE_FOLDER + "/BoardingPassView.jsp";
 	public String BOARDING_PASS_CTL = APP_CONTEXT + "/ctl/BoardingPassCtl";
 
 	public String BOARDING_PASS_LIST_VIEW = PAGE_FOLDER + "/BoardingPassListView.jsp";
 	public String BOARDING_PASS_LIST_CTL = APP_CONTEXT + "/ctl/BoardingPassListCtl";
-	
+
 	public String CLAIM_VIEW = PAGE_FOLDER + "/ClaimView.jsp";
 	public String CLAIM_CTL = APP_CONTEXT + "/ctl/ClaimCtl";
-	
+
 	public String CLAIM_LIST_VIEW = PAGE_FOLDER + "/ClaimListView.jsp";
 	public String CLAIM_LIST_CTL = APP_CONTEXT + "/ctl/ClaimListCtl";
-	
-	
+
 	public String SUBSCRIPTION_PLAN_VIEW = PAGE_FOLDER + "/SubscriptionPlanView.jsp";
 	public String SUBSCRIPTION_PLAN_CTL = APP_CONTEXT + "/ctl/SubscriptionPlanCtl";
-	
+
 	public String SUBSCRIPTION_PLAN_LIST_VIEW = PAGE_FOLDER + "/SubscriptionPlanListView.jsp";
 	public String SUBSCRIPTION_PLAN_LIST_CTL = APP_CONTEXT + "/ctl/SubscriptionPlanListCtl";
-	
-	
+
 	public String SPEAKER_VIEW = PAGE_FOLDER + "/SpeakerView.jsp";
 	public String SPEAKER_CTL = APP_CONTEXT + "/ctl/SpeakerCtl";
-	
+
 	public String SPEAKER_LIST_VIEW = PAGE_FOLDER + "/SpeakerListView.jsp";
 	public String SPEAKER_LIST_CTL = APP_CONTEXT + "/ctl/SpeakerListCtl";
 
+	public String JOB_APPLICATION_VIEW = PAGE_FOLDER + "/JobApplicationView.jsp";
+	public String JOB_APPLICATION_CTL = APP_CONTEXT + "/ctl/JobApplicationCtl";
+
+	public String JOB_APPLICATION_LIST_VIEW = PAGE_FOLDER + "/JobApplicationListView.jsp";
+	public String JOB_APPLICATION_LIST_CTL = APP_CONTEXT + "/ctl/JobApplicationListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
