@@ -194,6 +194,13 @@ public interface ORSView {
 
 	public String JOB_APPLICATION_LIST_VIEW = PAGE_FOLDER + "/JobApplicationListView.jsp";
 	public String JOB_APPLICATION_LIST_CTL = APP_CONTEXT + "/ctl/JobApplicationListCtl";
+	
+	
+	public String DEPARTMENT_VIEW = PAGE_FOLDER + "/DepartmentView.jsp";
+	public String DEPARTMENT_CTL = APP_CONTEXT + "/ctl/DepartmentCtl";
+
+	public String DEPARTMENT_LIST_VIEW = PAGE_FOLDER + "/DepartmentListView.jsp";
+	public String DEPARTMENT_LIST_CTL = APP_CONTEXT + "/ctl/DepartmentListCtl";
 
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
