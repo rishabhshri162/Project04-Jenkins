@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.POLICY_CTL%>"><b>Add Policy</b></a> |
+	<a href="<%=ORSView.POLICY_LIST_CTL%>"><b>Policy List</b></a> |
 	<a href="<%=ORSView.DEPARTMENT_CTL%>"><b>Add Department</b></a> |
 	<a href="<%=ORSView.DEPARTMENT_LIST_CTL%>"><b>Department List</b></a> |
 	<a href="<%=ORSView.JOB_APPLICATION_CTL%>"><b>Add Job Application</b></a> |
