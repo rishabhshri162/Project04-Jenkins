@@ -51,6 +51,8 @@
 	<%
 		if (user.getRoleId() == RoleBean.ADMIN) {
 	%>
+	<a href="<%=ORSView.PET_ADOPTION_CTL%>"><b>Add Pet Adoption</b></a> |
+	<a href="<%=ORSView.PET_ADOPTION_LIST_CTL%>"><b>Pet Adoption List</b></a> |
 	<a href="<%=ORSView.POLICY_CTL%>"><b>Add Policy</b></a> |
 	<a href="<%=ORSView.POLICY_LIST_CTL%>"><b>Policy List</b></a> |
 	<a href="<%=ORSView.DEPARTMENT_CTL%>"><b>Add Department</b></a> |

@@ -207,6 +207,12 @@ public interface ORSView {
 	public String POLICY_LIST_VIEW = PAGE_FOLDER + "/PolicyListView.jsp";
 	public String POLICY_LIST_CTL = APP_CONTEXT + "/ctl/PolicyListCtl";
 
+	public String PET_ADOPTION_VIEW = PAGE_FOLDER + "/PetAdoptionView.jsp";
+	public String PET_ADOPTION_CTL = APP_CONTEXT + "/ctl/PetAdoptionCtl";
+
+	public String PET_ADOPTION_LIST_VIEW = PAGE_FOLDER + "/PetAdoptionListView.jsp";
+	public String PET_ADOPTION_LIST_CTL = APP_CONTEXT + "/ctl/PetAdoptionListCtl";
+
 	public String JAVA_DOC = "/ORSProject-04" + JAVADOC_PATH + "/index.html";
 
 }
